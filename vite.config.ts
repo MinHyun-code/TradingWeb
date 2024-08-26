@@ -15,7 +15,7 @@ export default defineConfig(({mode}) => {
     server: {
       port: 5173,
       proxy: {
-        '/auth': { target: `${env.PROXY_URL}`, changeOrigin: true, secure: false },
+        // '/login': { target: `${env.PROXY_URL}`, changeOrigin: true },
       },
     },
   }
