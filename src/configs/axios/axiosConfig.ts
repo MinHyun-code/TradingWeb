@@ -22,6 +22,7 @@ const axiosInstance = axios.create({
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json',
+    'x-appkey': import.meta.env.VITE_APP_KEY
   }
 });
 

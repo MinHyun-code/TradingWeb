@@ -13,7 +13,7 @@ export const loginFunc = () => {
   const loginProcess = async (param: loginData) => {
     
     try {
-      const response = await axiosInstance.post(`https://ymjm.synology.me:28081/auth/login`, param);
+      const response = await axiosInstance.post(`/auth/login`, param);
 
       console.log(response);
 
