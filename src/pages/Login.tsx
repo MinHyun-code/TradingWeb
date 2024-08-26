@@ -1,5 +1,7 @@
 import React from "react";
-import { login, loginData } from "@/hooks/login/loginApi.ts";
+import { login, loginData } from "@/hooks/login/LoginApi";
+import { Box, Button, Center, Input } from "@chakra-ui/react";
+import PasswordInput from "@/components/common/PasswordInput";
 
 const { loginApi } = login();
 
@@ -9,15 +11,22 @@ const tempData: loginData = {
   authLogin: "Y",
 };
 
-function loginTest() {
+function loginFunc() {
   loginApi(tempData);
 }
 
 const Login = () => {
   return (
     <>
-      <h1>Login</h1>
-      <button onClick={loginTest}>Go to MyPage</button>
+      <Center>
+        <Box maxW="sm" p={4}>
+          <Input placeholder="Address" />
+          <PasswordInput />
+          <Button colorScheme="teal" variant="solid" onClick={loginFunc}>
+            로그인
+          </Button>
+        </Box>
+      </Center>
     </>
   );
 };
