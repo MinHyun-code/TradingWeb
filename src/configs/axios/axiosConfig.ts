@@ -1,5 +1,5 @@
-import axios from 'axios';
-import type { AxiosError, AxiosResponse } from 'axios';
+import axios from "axios";
+import type { AxiosError, AxiosResponse } from "axios";
 
 // ParamError Class
 export type paramError = {
@@ -20,38 +20,38 @@ type apiResponse<T = unknown> = {
 
 const axiosInstance = axios.create({
   headers: {
-    'X-Requested-With': 'XMLHttpRequest',
-    'Content-Type': 'application/json',
-    'x-appkey': import.meta.env.VITE_APP_KEY
-  }
+    "X-Requested-With": "XMLHttpRequest",
+    "Content-Type": "application/json",
+    "x-appkey": import.meta.env.VITE_APP_KEY,
+  },
 });
 
-axiosInstance.interceptors.response.use((response: AxiosResponse<apiResponse, unknown>) => {
-  
-  const { error, message } = response.data;
+axiosInstance.interceptors.response.use(
+  (response: AxiosResponse<apiResponse, unknown>) => {
+    const { error, message } = response.data;
 
-  console.debug("axios ok error :::", error);
-  console.debug("axios ok message :::", message);
+    console.debug("axios ok error :::", error);
+    console.debug("axios ok message :::", message);
 
-  return response;
-},
-(error: AxiosError) => {
-  
-  const { status } = error.response as AxiosResponse<apiResponse, unknown>;
+    return response;
+  },
+  (error: AxiosError) => {
+    const { status } = error.response as AxiosResponse<apiResponse, unknown>;
 
-  if(status == 401) {
-    console.log('401 error');
+    if (status == 401) {
+      console.log("401 error");
+    }
+
+    if (status == 403) {
+      console.log("403 error");
+    }
+
+    if (status == 500) {
+      console.log("500 error");
+    }
+
+    return error;
   }
-
-  if(status == 403) {
-    console.log('403 error');
-  }
-
-  if(status == 500) {
-    console.log('500 error');
-  }
-
-  return error;
-})
+);
 
 export default axiosInstance;

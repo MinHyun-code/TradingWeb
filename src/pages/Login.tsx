@@ -1,16 +1,16 @@
-import React from 'react';
-import { loginFunc, loginData } from '@/hooks/login/loginApi.ts';
+import React from "react";
+import { login, loginData } from "@/hooks/login/loginApi.ts";
 
-const { loginProcess } = loginFunc();
+const { loginApi } = login();
 
 const tempData: loginData = {
-  email : 'chmin82@gmail.com',
-  password : 'dc98e82fcfb4b165f5fa390d5ca61a9245a5be6ea70a4f00020ddff029afefba',
-  authLogin : 'Y'
-}
+  email: "chmin82@gmail.com",
+  password: "dc98e82fcfb4b165f5fa390d5ca61a9245a5be6ea70a4f00020ddff029afefba",
+  authLogin: "Y",
+};
 
 function loginTest() {
-  loginProcess(tempData);
+  loginApi(tempData);
 }
 
 const Login = () => {

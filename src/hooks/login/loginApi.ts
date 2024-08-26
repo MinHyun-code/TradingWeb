@@ -1,4 +1,4 @@
-import axiosInstance from '@/configs/axios/axiosConfig';
+import axiosInstance from "@/configs/axios/axiosConfig";
 
 export interface loginData {
   email: string;
@@ -6,22 +6,17 @@ export interface loginData {
   authLogin: string;
 }
 
-
-export const loginFunc = () => {
-  
-
-  const loginProcess = async (param: loginData) => {
-    
+export const login = () => {
+  const loginApi = async (param: loginData) => {
     try {
       const response = await axiosInstance.post(`/auth/login`, param);
 
       console.log(response);
-
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return {
-    loginProcess
-  }
-}
+    loginApi,
+  };
+};
