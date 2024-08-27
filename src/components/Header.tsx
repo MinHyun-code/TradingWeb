@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Box,
   Flex,
   Heading,
   HStack,
-  Link,
+  Link as ChakraLink,
   Button,
   useBreakpointValue,
 } from "@chakra-ui/react";
@@ -23,25 +24,58 @@ const Header = () => {
   });
 
   return (
-    <Box as="header" color="white" px={4} py={2}>
+    <Box as="header" color="white" px={8} py={4}>
       <Flex align="center" justify="space-between">
-        <Heading size={headingSize} color="purple.500">
-          Trading
-        </Heading>
-        <HStack spacing={4}>
+        <HStack spacing={8}>
+          <Heading size={headingSize} color="purple.500" mr={7}>
+            Trading
+          </Heading>
           {isDesktop && (
             <>
-              <Link href="#" fontWeight="bold">
+              <ChakraLink
+                as={Link}
+                to="/"
+                sx={{ color: colorMode === "dark" ? "white" : "black" }}
+                fontWeight="500"
+              >
                 Home
-              </Link>
-              <Link href="#" fontWeight="bold">
+              </ChakraLink>
+              <ChakraLink
+                as={Link}
+                to="/"
+                sx={{ color: colorMode === "dark" ? "white" : "black" }}
+                fontWeight="500"
+              >
                 About
-              </Link>
-              <Link href="#" fontWeight="bold">
+              </ChakraLink>
+              <ChakraLink
+                as={Link}
+                to="/"
+                sx={{ color: colorMode === "dark" ? "white" : "black" }}
+                fontWeight="500"
+              >
                 Contact
-              </Link>
+              </ChakraLink>
             </>
           )}
+        </HStack>
+        <HStack spacing={8}>
+          <ChakraLink
+            as={Link}
+            to="/login"
+            sx={{ color: colorMode === "dark" ? "white" : "black" }}
+            fontWeight="500"
+          >
+            Log In
+          </ChakraLink>
+          <ChakraLink
+            as={Link}
+            to="/signUp"
+            sx={{ color: colorMode === "dark" ? "white" : "black" }}
+            fontWeight="500"
+          >
+            Sign Up
+          </ChakraLink>
           <Button
             onClick={toggleColorMode}
             variant="outline"

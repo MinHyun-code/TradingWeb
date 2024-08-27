@@ -1,8 +1,13 @@
-// src/components/PasswordInput.js
 import React from "react";
 import { InputGroup, Input, InputRightElement, Button } from "@chakra-ui/react";
 
-function PasswordInput() {
+// Props 타입 정의
+interface PasswordInputProps {
+  value: string;
+  onChange: (newValue: string) => void;
+}
+
+const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange }) => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
@@ -11,7 +16,9 @@ function PasswordInput() {
       <Input
         pr="4.5rem"
         type={show ? "text" : "password"}
-        placeholder="Password"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="비밀번호"
       />
       <InputRightElement width="4.5rem">
         <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -20,6 +27,6 @@ function PasswordInput() {
       </InputRightElement>
     </InputGroup>
   );
-}
+};
 
 export default PasswordInput;
