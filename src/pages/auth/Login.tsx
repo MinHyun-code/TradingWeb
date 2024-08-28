@@ -68,6 +68,7 @@ const Login = () => {
               as={Link}
               to="/signUp"
               sx={{ color: colorMode === "dark" ? "white" : "black" }}
+              mt={5}
             >
               Create Account
             </ChakraLink>

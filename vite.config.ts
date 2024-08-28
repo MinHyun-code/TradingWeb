@@ -14,7 +14,16 @@ export default defineConfig(({ mode }) => {
     server: {
       port: 5173,
       proxy: {
-        "/auth": { target: `${env.PROXY_URL}`, changeOrigin: true },
+        "/api": {
+          target: `${env.PROXY_URL}`,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        },
+        "/upbit-api": {
+          target: `${env.PROXY_UPBIT_URL}`,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/upbit-api/, ""),
+        },
       },
     },
   };

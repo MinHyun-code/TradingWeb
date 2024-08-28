@@ -34,27 +34,27 @@ const Header = () => {
             <>
               <ChakraLink
                 as={Link}
-                to="/"
+                to="/interest"
                 sx={{ color: colorMode === "dark" ? "white" : "black" }}
                 fontWeight="500"
               >
-                Home
+                관심종목
               </ChakraLink>
               <ChakraLink
                 as={Link}
-                to="/"
+                to="/idea"
                 sx={{ color: colorMode === "dark" ? "white" : "black" }}
                 fontWeight="500"
               >
-                About
+                아이디어
               </ChakraLink>
               <ChakraLink
                 as={Link}
-                to="/"
+                to="/news"
                 sx={{ color: colorMode === "dark" ? "white" : "black" }}
                 fontWeight="500"
               >
-                Contact
+                뉴스
               </ChakraLink>
             </>
           )}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Center, Input } from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Input } from "@chakra-ui/react";
 import PasswordInput from "@/components/common/PasswordInput";
 import { SignUpData, useSignUp } from "@/hooks/auth/authApi";
 
@@ -26,29 +26,31 @@ const SignUp = () => {
 
   return (
     <>
-      <Center>
-        <Box maxW="sm" p={4}>
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일"
-          />
-          <PasswordInput value={password} onChange={passwordChange} />
-          <Input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="이름"
-          />
-          <Input
-            value={profile}
-            onChange={(e) => setProfile(e.target.value)}
-            placeholder="소개"
-          />
-          <Button colorScheme="teal" variant="solid" onClick={signUpFunc}>
-            회원가입
-          </Button>
-        </Box>
-      </Center>
+      <Flex align="center" justify="center" h="100vh" w="100vw">
+        <Center>
+          <Box maxW="sm" p={4}>
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="이메일"
+            />
+            <PasswordInput value={password} onChange={passwordChange} />
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="이름"
+            />
+            <Input
+              value={profile}
+              onChange={(e) => setProfile(e.target.value)}
+              placeholder="소개"
+            />
+            <Button colorScheme="teal" variant="solid" onClick={signUpFunc}>
+              회원가입
+            </Button>
+          </Box>
+        </Center>
+      </Flex>
     </>
   );
 };

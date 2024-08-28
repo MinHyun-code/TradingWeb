@@ -21,7 +21,7 @@ export const useLogin = () => {
 
   const loginApi = async (param: LoginData) => {
     try {
-      const response = await axiosInstance.post("/auth/login", param);
+      const response = await axiosInstance.post("/api/auth/login", param);
       console.log(response);
       if (response.status === 200) {
         toast({
@@ -62,13 +62,34 @@ export const useLogin = () => {
 
 // 구글 간편 로그인 API
 export const useLoginGoogle = () => {
+  const toast = useToast();
   const loginGoogleApi = async (token: string | undefined) => {
     try {
-      const response = await axiosInstance.post(`/auth/google/verify`, token);
+      const response = await axiosInstance.post(
+        `/api/auth/google/verify`,
+        token
+      );
 
       console.log(response);
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.result?.message ||
+          "로그인 중 오류가 발생했습니다.";
+        toast({
+          description: errorMessage,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          description: "예기치 못한 오류가 발생했습니다.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
   return {
@@ -78,13 +99,31 @@ export const useLoginGoogle = () => {
 
 // 회원가입
 export const useSignUp = () => {
+  const toast = useToast();
   const signUpApi = async (param: SignUpData) => {
     try {
-      const response = await axiosInstance.post(`/auth/signup`, param);
+      const response = await axiosInstance.post(`/api/auth/signup`, param);
 
       console.log(response);
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+          error.response.data?.result?.message ||
+          "회원가입 중 오류가 발생했습니다.";
+        toast({
+          description: errorMessage,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          description: "예기치 못한 오류가 발생했습니다.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     }
   };
   return {
