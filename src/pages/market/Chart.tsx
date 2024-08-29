@@ -3,7 +3,8 @@ import { useUpbitChart, ChartParam } from "@/hooks/upbit/UpbitApi";
 import { Box, Flex } from "@chakra-ui/react";
 import Layout from "@/components/chart/ChartLayout";
 import "@/App.css";
-import { dispose, init } from "klinecharts";
+import { Chart, dispose, init } from "klinecharts";
+import generatedDataList from "./generatedData";
 
 type SeriesType = {
   close: number;
@@ -18,6 +19,23 @@ type SeriesLinearType = {
   x: Date;
   y: number;
 };
+
+function updateData(chart: Chart | null) {
+  setTimeout(() => {
+    if (chart) {
+      const dataList = chart.getDataList();
+      const lastData = dataList[dataList.length - 1];
+      const newData = generatedDataList(
+        lastData.timestamp,
+        lastData.close,
+        1
+      )[0];
+      newData.timestamp += 1000 * 60;
+      chart.updateData(newData);
+    }
+    updateData(chart);
+  }, 1000);
+}
 
 const ApexChart: React.FC = () => {
   const { upbitChartApi, dataList } = useUpbitChart();
@@ -68,18 +86,20 @@ const ApexChart: React.FC = () => {
           ...prevData,
         ]);
       }
-      chart?.applyNewData(seriesData);
-      dispose("update-k-line");
+      // chart?.applyNewData(seriesData);
+      chart?.applyNewData(generatedDataList());
+      updateData(chart);
+      return () => {
+        dispose("update-k-line");
+      };
     }
   }, [dataList]);
 
   return (
     <Flex>
-      <Flex flexDirection={"column"} w="50vw">
-        <Layout title="实时更新">
-          <div id="update-k-line" className="k-line-chart" />
-        </Layout>
-      </Flex>
+      <Layout title="实时更新">
+        <div id="update-k-line" className="k-line-chart" />
+      </Layout>
     </Flex>
   );
 };
