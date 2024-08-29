@@ -1,32 +1,54 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
 import { useEffect, useState } from "react";
 
-interface itemData {
+interface ItemData {
   market: string;
   korean_name: string;
   english_name: string;
 }
 
-type itemResult = {
-  KRW: itemData[];
-  BTC: itemData[];
-  USDT: itemData[];
+type ItemResult = {
+  KRW: ItemData[];
+  BTC: ItemData[];
+  USDT: ItemData[];
+};
+
+export interface ChartParam {
+  market: string; // 코드
+  unit: number | null; // 분 단위 (1, 3, 5 ,10, 15, 30, 60 240)
+  count: number; // 캔들 개수 (최대 200개)
+  convertingPriceUnit: string; // 화폐 단위 (ex. KRW)
+  to: Date | null; // 마지막 캔들 시각, 비워서 요청 시 가장 최근 캔들
+  type: string; // 구분자 (minutes, days, weeks, months)
+}
+
+export type ChartResult = {
+  market: string;
+  candle_date_time_utc: Date;
+  candle_date_time_kst: Date;
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
+  timestamp: number;
+  candle_acc_trade_price: number;
+  candle_acc_trade_volume: number;
 };
 
 // 업비트 종목 조회 API
 export const useUpbitMarket = () => {
-  const [dataList, setDataList] = useState<itemResult>();
-  const [KRWList, setKRWList] = useState<itemData[]>([]);
-  const [BTCList, setBTCList] = useState<itemData[]>([]);
-  const [USDTList, setUSDTList] = useState<itemData[]>([]);
+  const [dataList, setDataList] = useState<ItemResult>();
+  const [KRWList, setKRWList] = useState<ItemData[]>([]);
+  const [BTCList, setBTCList] = useState<ItemData[]>([]);
+  const [USDTList, setUSDTList] = useState<ItemData[]>([]);
 
   const upbitMarketApi = async () => {
     try {
       const response = await axiosInstance.get("/upbit-api/v1/market/all");
-      const data: itemData[] = response.data;
-      const KRW: itemData[] = [];
-      const BTC: itemData[] = [];
-      const USDT: itemData[] = [];
+      const data: ItemData[] = response.data;
+      const KRW: ItemData[] = [];
+      const BTC: ItemData[] = [];
+      const USDT: ItemData[] = [];
 
       for (const item of data) {
         const unit = item.market.split("-");
@@ -58,6 +80,30 @@ export const useUpbitMarket = () => {
 
   return {
     upbitMarketApi,
+    dataList,
+  };
+};
+
+// 업비트 시세 조회 API
+export const useUpbitChart = () => {
+  const [dataList, setDataList] = useState<ChartResult[]>();
+
+  const upbitChartApi = async (param: ChartParam) => {
+    try {
+      const BASE_PATH = "/upbit-api/v1/candles/";
+      let CHART_PATH = BASE_PATH + param.type;
+      if (param.type === "minutes") {
+        CHART_PATH += "/" + param.unit;
+      }
+      const response = await axiosInstance.get(CHART_PATH, { params: param });
+      setDataList(response.data);
+    } catch (error) {
+      console.error("오류:", error);
+    }
+  };
+
+  return {
+    upbitChartApi,
     dataList,
   };
 };

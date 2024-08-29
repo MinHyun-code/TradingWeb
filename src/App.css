@@ -2,3 +2,13 @@
   margin: 0 auto;
   text-align: center;
 }
+.chart-container {
+  width: 100%;
+  overflow-x: auto; /* 수평 스크롤을 활성화합니다. */
+  overflow-y: hidden; /* 수직 스크롤을 숨깁니다. */
+  white-space: nowrap; /* 차트가 한 줄로 표시되도록 합니다. */
+}
+
+.apexcharts-canvas {
+  min-width: 1500px; /* 차트의 너비를 컨테이너보다 크게 설정합니다. */
+}

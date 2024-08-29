@@ -1,7 +1,7 @@
 import React from "react";
 import { Spinner, Box } from "@chakra-ui/react";
 
-const LoadingSpinner: React.FC = () => {
+const LoadingSpinner = () => {
   return (
     <Box
       position="fixed"
@@ -9,7 +9,6 @@ const LoadingSpinner: React.FC = () => {
       left="0"
       width="100vw"
       height="100vh"
-      backgroundColor="rgba(255, 255, 255, 0.8)" // 배경을 흰색으로 설정하고 투명도 조정
       display="flex"
       alignItems="center"
       justifyContent="center"

@@ -28,7 +28,9 @@ const Header = () => {
       <Flex align="center" justify="space-between">
         <HStack spacing={8}>
           <Heading size={headingSize} color="purple.500" mr={7}>
-            Trading
+            <ChakraLink as={Link} to="/">
+              Trading
+            </ChakraLink>
           </Heading>
           {isDesktop && (
             <>
