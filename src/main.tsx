@@ -9,13 +9,11 @@ import theme from "@/theme.ts";
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <ChakraProvider theme={theme}>
-      <BrowserRouter>
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-          <App />
-        </GoogleOAuthProvider>
-      </BrowserRouter>
-    </ChakraProvider>
-  </StrictMode>
+  <ChakraProvider theme={theme}>
+    <BrowserRouter>
+      <GoogleOAuthProvider clientId={CLIENT_ID}>
+        <App />
+      </GoogleOAuthProvider>
+    </BrowserRouter>
+  </ChakraProvider>
 );

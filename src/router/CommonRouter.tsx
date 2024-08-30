@@ -7,7 +7,7 @@ import Idea from "@/pages/idea/Idea";
 import News from "@/pages/news/News";
 import Interest from "@/pages/interest/Interest";
 import Market from "@/pages/market/Market";
-import Chart from "@/pages/market/Chart";
+import ChartView from "@/pages/market/ChartView";
 
 function CommonRouter() {
   return (
@@ -19,7 +19,7 @@ function CommonRouter() {
         <Route path="/news" element={<News />}></Route>
         <Route path="/interest" element={<Interest />}></Route>
         <Route path="/market" element={<Market />}></Route>
-        <Route path="/chart" element={<Chart />}></Route>
+        <Route path="/chart" element={<ChartView />}></Route>
       </Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/signUp" element={<SignUp />}></Route>
