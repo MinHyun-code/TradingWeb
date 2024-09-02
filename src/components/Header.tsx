@@ -37,24 +37,24 @@ const Header = () => {
               <ChakraLink
                 as={Link}
                 to="/interest"
-                sx={{ color: colorMode === "dark" ? "white" : "black" }}
-                fontWeight="500"
+                sx={{ color: colorMode === "dark" ? "white" : "#000040" }}
+                fontWeight="600"
               >
                 관심종목
               </ChakraLink>
               <ChakraLink
                 as={Link}
                 to="/idea"
-                sx={{ color: colorMode === "dark" ? "white" : "black" }}
-                fontWeight="500"
+                sx={{ color: colorMode === "dark" ? "white" : "#000040" }}
+                fontWeight="600"
               >
                 아이디어
               </ChakraLink>
               <ChakraLink
                 as={Link}
                 to="/news"
-                sx={{ color: colorMode === "dark" ? "white" : "black" }}
-                fontWeight="500"
+                sx={{ color: colorMode === "dark" ? "white" : "#000040" }}
+                fontWeight="600"
               >
                 뉴스
               </ChakraLink>
@@ -65,16 +65,16 @@ const Header = () => {
           <ChakraLink
             as={Link}
             to="/login"
-            sx={{ color: colorMode === "dark" ? "white" : "black" }}
-            fontWeight="500"
+            sx={{ color: colorMode === "dark" ? "white" : "#000040" }}
+            fontWeight="600"
           >
             Log In
           </ChakraLink>
           <ChakraLink
             as={Link}
             to="/signUp"
-            sx={{ color: colorMode === "dark" ? "white" : "black" }}
-            fontWeight="500"
+            sx={{ color: colorMode === "dark" ? "white" : "#000040" }}
+            fontWeight="600"
           >
             Sign Up
           </ChakraLink>

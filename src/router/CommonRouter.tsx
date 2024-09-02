@@ -8,6 +8,7 @@ import News from "@/pages/news/News";
 import Interest from "@/pages/interest/Interest";
 import Market from "@/pages/market/Market";
 import ChartView from "@/pages/market/ChartView";
+import LeftSideLayout from "@/layout/LeftSideLayout";
 
 function CommonRouter() {
   return (
@@ -16,10 +17,13 @@ function CommonRouter() {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />}></Route>
         <Route path="/idea" element={<Idea />}></Route>
-        <Route path="/news" element={<News />}></Route>
         <Route path="/interest" element={<Interest />}></Route>
         <Route path="/market" element={<Market />}></Route>
         <Route path="/chart" element={<ChartView />}></Route>
+      </Route>
+      <Route element={<LeftSideLayout />}>
+        <Route path="/news" element={<News />}></Route>
+        <Route path="/news/:id" element={<News />}></Route>
       </Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/signUp" element={<SignUp />}></Route>
