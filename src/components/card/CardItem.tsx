@@ -26,7 +26,7 @@ const CardItem: React.FC<CardItemProps> = ({ item }) => {
       overflow="hidden"
       variant="outline"
       height={{ base: "100%", sm: "150px" }}
-      onClick={() => (location.href = item.link)}
+      onClick={() => window.open(item.link)}
       transition="all 0.3s ease" // 호버 효과 전환을 부드럽게 하기 위한 설정
       _hover={{
         boxShadow: "xl", // 호버 시 그림자 효과 추가

@@ -17,11 +17,13 @@ const News = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    console.log(dataList);
-  }, [dataList]);
-
   const items = dataList?.rss.channel.item ?? [];
+
+  // 최대 표시할 항목 수
+  const MAX_ITEMS = 30;
+
+  // 30개까지만 슬라이스
+  const displayedItems = items.slice(0, MAX_ITEMS);
 
   if (!Array.isArray(dataList?.rss.channel.item)) {
     return <p>No data available</p>; // 데이터가 없을 때의 메시지
@@ -30,8 +32,10 @@ const News = () => {
   return (
     <>
       <Flex direction="column" gap={4}>
-        {items.length > 0 ? (
-          items.map((item, index) => <CardItem key={index} item={item} />)
+        {displayedItems.length > 0 ? (
+          displayedItems.map((item, index) => (
+            <CardItem key={index} item={item} />
+          ))
         ) : (
           <p>No news items</p>
         )}
