@@ -43,7 +43,7 @@ const LeftSideBar = () => {
       {/* PC */}
       <Box
         as="aside"
-        width={{ base: "full", md: "250px" }} // 모바일에서는 전체 너비, 큰 화면에서는 고정 너비
+        width={{ base: "full", md: "150px" }} // 모바일에서는 전체 너비, 큰 화면에서는 고정 너비
         p={4}
         display={{ base: "none", md: "block" }} // 모바일에서는 숨기기
       >
