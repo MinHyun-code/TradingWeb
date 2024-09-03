@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, VStack, Button } from "@chakra-ui/react";
+import { Box, VStack, Button, Flex, HStack } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useColorModeValue } from "@chakra-ui/react";
 
@@ -39,24 +39,43 @@ const LeftSideBar = () => {
   const inactiveColor = useColorModeValue("gray.200", "gray.600");
 
   return (
-    <Box
-      as="aside"
-      width={{ base: "full", md: "250px" }} // 모바일에서는 전체 너비, 큰 화면에서는 고정 너비
-      p={4}
-      display={{ base: "none", md: "block" }} // 모바일에서는 숨기기
-    >
-      <VStack spacing={4} align="start">
-        {currentMenu.map((item, index) => (
-          <Button
-            key={index}
-            variant="link"
-            color={isActive(item.value) ? activeColor : inactiveColor}
-            onClick={() => navigate("/" + basePath + "/" + item.value)}
-          >
-            {item.name}
-          </Button>
-        ))}
-      </VStack>
+    <Box>
+      {/* PC */}
+      <Box
+        as="aside"
+        width={{ base: "full", md: "250px" }} // 모바일에서는 전체 너비, 큰 화면에서는 고정 너비
+        p={4}
+        display={{ base: "none", md: "block" }} // 모바일에서는 숨기기
+      >
+        <VStack spacing={4} align="start">
+          {currentMenu.map((item, index) => (
+            <Button
+              key={index}
+              variant="link"
+              color={isActive(item.value) ? activeColor : inactiveColor}
+              onClick={() => navigate("/" + basePath + "/" + item.value)}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </VStack>
+      </Box>
+
+      {/* 모바일 */}
+      <Box width="full" display={{ base: "block", md: "none" }}>
+        <HStack spacing={4} align="start" justifyContent="space-evenly">
+          {currentMenu.map((item, index) => (
+            <Button
+              key={index}
+              variant="link"
+              color={isActive(item.value) ? activeColor : inactiveColor}
+              onClick={() => navigate("/" + basePath + "/" + item.value)}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </HStack>
+      </Box>
     </Box>
   );
 };
