@@ -24,6 +24,21 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/upbit-api/, ""),
         },
+        "/mk-api": {
+          target: `${env.PROXY_MK_URL}`,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/mk-api/, ""),
+        },
+        "/coindesk-api": {
+          target: `${env.PROXY_COINDESK_URL}`,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/coindesk-api/, ""),
+        },
+        "/cointelegraph-api": {
+          target: `${env.PROXY_COINTELEGRAPH_URL}`,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/cointelegraph-api/, ""),
+        },
       },
     },
   };
