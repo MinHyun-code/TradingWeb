@@ -11,6 +11,7 @@ import {
 import PasswordInput from "@/components/common/PasswordInput";
 import { GoogleLogin } from "@react-oauth/google";
 import { Link } from "react-router-dom";
+import CryptoJS from "crypto-js";
 
 const Login = () => {
   const { loginApi } = useLogin();
@@ -20,11 +21,17 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginFunc = (e: FormEvent<HTMLFormElement>) => {
+  const hashFunction = (password: string) => {
+    const hash = CryptoJS.SHA256(password);
+    return hash.toString(CryptoJS.enc.Hex);
+  };
+
+  const loginFunc = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const hashedPassword = await hashFunction(password);
     const param: LoginData = {
       email: email,
-      password: password,
+      password: hashedPassword,
       authLogin: "Y",
     };
     loginApi(param);

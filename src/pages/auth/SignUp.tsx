@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, Center, Flex, Input } from "@chakra-ui/react";
 import PasswordInput from "@/components/common/PasswordInput";
 import { SignUpData, useSignUp } from "@/hooks/auth/authApi";
+import CryptoJS from "crypto-js";
 
 const SignUp = () => {
   const { signUpApi } = useSignUp();
@@ -14,10 +15,19 @@ const SignUp = () => {
     setPassword(newPassword);
   };
 
-  const signUpFunc = () => {
+  const hashFunction = (password: string) => {
+    const hash = CryptoJS.SHA256(password);
+    return hash.toString(CryptoJS.enc.Hex);
+  };
+
+  const signUpFunc = async () => {
+    const hashedPassword = await hashFunction(password);
+
+    console.log(hashedPassword);
+
     const param: SignUpData = {
       email: email,
-      password: password,
+      password: hashedPassword,
       name: name,
       profile: profile,
     };
