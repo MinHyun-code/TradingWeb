@@ -1,7 +1,5 @@
 import React from "react";
-import { Box, VStack, Button, Flex, HStack } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useColorModeValue } from "@chakra-ui/react";
 
 const menuData = {
   news: [
@@ -12,7 +10,7 @@ const menuData = {
   home: [{ name: "코인텔레그래프", value: "cointelegraph" }],
 };
 
-const LeftSideBar = () => {
+const LeftSideBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -35,48 +33,47 @@ const LeftSideBar = () => {
   };
 
   // 색상 모드에 따라 버튼 색상 설정
-  const activeColor = useColorModeValue("teal.500", "teal.300");
-  const inactiveColor = useColorModeValue("gray.200", "gray.600");
+  const activeColor = "text-teal-500"; // Tailwind 색상 클래스
+  const inactiveColor = "text-gray-600"; // Tailwind 색상 클래스
 
   return (
-    <Box>
+    <div>
       {/* PC */}
-      <Box
-        as="aside"
-        width={{ base: "full", md: "150px" }} // 모바일에서는 전체 너비, 큰 화면에서는 고정 너비
-        p={4}
-        display={{ base: "none", md: "block" }} // 모바일에서는 숨기기
+      <aside
+        className={`hidden md:block p-4 ${basePath ? "w-40" : "w-32"}`} // 모바일에서는 숨기기, 큰 화면에서는 고정 너비
       >
-        <VStack spacing={4} align="start">
-          {currentMenu.map((item, index) => (
-            <Button
-              key={index}
-              variant="link"
-              color={isActive(item.value) ? activeColor : inactiveColor}
+        <div className="flex flex-col space-y-4">
+          {currentMenu.map((item) => (
+            <button
+              key={item.value}
+              className={`text-left font-medium ${
+                isActive(item.value) ? activeColor : inactiveColor
+              }`}
               onClick={() => navigate("/" + basePath + "/" + item.value)}
             >
               {item.name}
-            </Button>
+            </button>
           ))}
-        </VStack>
-      </Box>
+        </div>
+      </aside>
 
       {/* 모바일 */}
-      <Box width="full" display={{ base: "block", md: "none" }}>
-        <HStack spacing={4} align="start" justifyContent="space-evenly">
-          {currentMenu.map((item, index) => (
-            <Button
-              key={index}
-              variant="link"
-              color={isActive(item.value) ? activeColor : inactiveColor}
+      <div className="block md:hidden w-full">
+        <div className="flex justify-evenly">
+          {currentMenu.map((item) => (
+            <button
+              key={item.value}
+              className={`font-medium ${
+                isActive(item.value) ? activeColor : inactiveColor
+              }`}
               onClick={() => navigate("/" + basePath + "/" + item.value)}
             >
               {item.name}
-            </Button>
+            </button>
           ))}
-        </HStack>
-      </Box>
-    </Box>
+        </div>
+      </div>
+    </div>
   );
 };
 

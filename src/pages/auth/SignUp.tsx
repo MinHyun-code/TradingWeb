@@ -37,7 +37,7 @@ const SignUp = () => {
 
   return (
     <>
-      <div className="flex w-screen h-screen justify-evenly items-center">
+      <div className="flex w-screen h-screen justify-evenly items-center dark:bg-gray-800">
         <div>
           <div>
             <Input

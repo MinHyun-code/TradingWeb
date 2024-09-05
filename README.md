@@ -4,7 +4,7 @@ Language: React, Typescript
 
 Build Tool : Vite
 
-Design Tool : chakra-ui
+Design Tool : chadcn/ui
 
 Node : v20.10.0
 

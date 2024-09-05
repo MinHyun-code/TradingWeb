@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useUpbitMarket } from "@/hooks/upbit/UpbitApi";
+import { Button } from "@/components/ui/button";
 import "react-data-grid/lib/styles.css";
 import DataGrid from "react-data-grid";
-import { Box, Button, Flex } from "@chakra-ui/react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
@@ -44,20 +44,20 @@ const Market = () => {
   return (
     <>
       <Button onClick={handleButtonClick}>차트 이동(USDT-BTC)</Button>
-      <Flex>
-        <Box>
+      <div className="flex">
+        <div>
           <h1>KRW</h1>
           <DataGrid columns={columns} rows={dataList.KRW} />
-        </Box>
-        <Box>
+        </div>
+        <div>
           <h1>BTC</h1>
           <DataGrid columns={columns} rows={dataList.BTC} />
-        </Box>
-        <Box>
+        </div>
+        <div>
           <h1>USDT</h1>
           <DataGrid columns={columns} rows={dataList.USDT} />
-        </Box>
-      </Flex>
+        </div>
+      </div>
     </>
   );
 };

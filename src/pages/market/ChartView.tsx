@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useUpbitChart, ChartParam } from "@/hooks/upbit/UpbitApi";
-import { Box, Flex } from "@chakra-ui/react";
 import Chart from "@/components/chart/Chart";
 import "@/App.css";
 
@@ -67,9 +66,9 @@ const ApexChart: React.FC = () => {
   }, [dataList]);
 
   return (
-    <Flex>
+    <div className="flex">
       <Chart></Chart>
-    </Flex>
+    </div>
   );
 };
 
