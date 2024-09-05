@@ -1,5 +1,4 @@
 import { useNewsList } from "@/hooks/news/NewsApi";
-import { Flex } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CardItem from "@/components/card/CardItem";
@@ -31,7 +30,7 @@ const News = () => {
 
   return (
     <>
-      <Flex direction="column" gap={4}>
+      <div className="flex flex-col">
         {displayedItems.length > 0 ? (
           displayedItems.map((item, index) => (
             <CardItem key={index} item={item} />
@@ -39,7 +38,7 @@ const News = () => {
         ) : (
           <p>No news items</p>
         )}
-      </Flex>
+      </div>
     </>
   );
 };
