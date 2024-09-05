@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Button, Center, Flex, Input } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/common/PasswordInput";
 import { SignUpData, useSignUp } from "@/hooks/auth/authApi";
 import CryptoJS from "crypto-js";
@@ -36,9 +37,9 @@ const SignUp = () => {
 
   return (
     <>
-      <Flex align="center" justify="center" h="100vh" w="100vw">
-        <Center>
-          <Box maxW="sm" p={4}>
+      <div className="flex w-screen h-screen justify-evenly items-center">
+        <div>
+          <div>
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -55,12 +56,10 @@ const SignUp = () => {
               onChange={(e) => setProfile(e.target.value)}
               placeholder="소개"
             />
-            <Button colorScheme="teal" variant="solid" onClick={signUpFunc}>
-              회원가입
-            </Button>
-          </Box>
-        </Center>
-      </Flex>
+            <Button onClick={signUpFunc}>회원가입</Button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

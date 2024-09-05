@@ -1,5 +1,6 @@
 import React from "react";
-import { InputGroup, Input, InputRightElement, Button } from "@chakra-ui/react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 // Props 타입 정의
 interface PasswordInputProps {
@@ -12,20 +13,15 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange }) => {
   const handleClick = () => setShow(!show);
 
   return (
-    <InputGroup size="md">
+    <div className="flex">
       <Input
-        pr="4.5rem"
         type={show ? "text" : "password"}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="비밀번호"
       />
-      <InputRightElement width="4.5rem">
-        <Button h="1.75rem" size="sm" onClick={handleClick}>
-          {show ? "Hide" : "Show"}
-        </Button>
-      </InputRightElement>
-    </InputGroup>
+      <Button onClick={handleClick}>{show ? "Hide" : "Show"}</Button>
+    </div>
   );
 };
 
