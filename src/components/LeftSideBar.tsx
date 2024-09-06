@@ -32,10 +32,6 @@ const LeftSideBar: React.FC = () => {
     return currentPath === `/${basePath}/${value}`;
   };
 
-  // 색상 모드에 따라 버튼 색상 설정
-  const activeColor = "text-teal-500"; // Tailwind 색상 클래스
-  const inactiveColor = "text-gray-600"; // Tailwind 색상 클래스
-
   return (
     <div>
       {/* PC */}
@@ -46,8 +42,10 @@ const LeftSideBar: React.FC = () => {
           {currentMenu.map((item) => (
             <button
               key={item.value}
-              className={`text-left font-medium ${
-                isActive(item.value) ? activeColor : inactiveColor
+              className={`text-left font-semibold ${
+                isActive(item.value)
+                  ? "text-slate-900 dark:text-white"
+                  : "text-slate-500"
               }`}
               onClick={() => navigate("/" + basePath + "/" + item.value)}
             >
@@ -64,7 +62,9 @@ const LeftSideBar: React.FC = () => {
             <button
               key={item.value}
               className={`font-medium ${
-                isActive(item.value) ? activeColor : inactiveColor
+                isActive(item.value)
+                  ? "text-slate-900 dark:text-white"
+                  : "text-slate-500"
               }`}
               onClick={() => navigate("/" + basePath + "/" + item.value)}
             >
