@@ -7,10 +7,12 @@ const LeftSideLayout: React.FC = () => {
   return (
     <div className="dark:bg-gray-900">
       <Header />
-      <main className="flex flex-col md:flex-row mx-auto mt-4 container mx-auto">
-        <LeftSideBar />
-        <Main />
-      </main>
+      <div className="flex justify-evenly">
+        <main className="flex flex-col md:flex-row mt-4 container w-screen md:w-8/12">
+          <LeftSideBar />
+          <Main />
+        </main>
+      </div>
     </div>
   );
 };

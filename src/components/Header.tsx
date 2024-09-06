@@ -16,19 +16,19 @@ const Header = () => {
           <nav className="hidden md:flex space-x-8">
             <Link
               to="/interest"
-              className="font-semibold text-blue-900 dark:text-white"
+              className="font-semibold text-slate-900 dark:text-white"
             >
               관심종목
             </Link>
             <Link
               to="/idea"
-              className="font-semibold text-blue-900 dark:text-white"
+              className="font-semibold text-slate-900 dark:text-white"
             >
               아이디어
             </Link>
             <Link
               to="/news"
-              className="font-semibold text-blue-900 dark:text-white"
+              className="font-semibold text-slate-900 dark:text-white"
             >
               뉴스
             </Link>
@@ -37,13 +37,13 @@ const Header = () => {
         <div className="flex items-center space-x-8">
           <Link
             to="/login"
-            className="font-semibold text-blue-900 dark:text-white"
+            className="font-semibold text-slate-900 dark:text-white"
           >
             Log In
           </Link>
           <Link
             to="/signUp"
-            className="font-semibold text-blue-900 dark:text-white"
+            className="font-semibold text-slate-900 dark:text-white"
           >
             Sign Up
           </Link>
