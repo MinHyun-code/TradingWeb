@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       scale: {
-        103: "1.03", // 3% 확대
+        101: "1.01",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -53,6 +53,7 @@ export default {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+        darkMode: "#000040",
       },
     },
   },

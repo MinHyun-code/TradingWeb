@@ -14,8 +14,12 @@ const CardItem: React.FC<CardItemProps> = ({ item }) => {
 
   useEffect(() => {
     if (currentPath.includes("/cointelegraph")) {
-      setDescription(item.description.replace(/<p[^>]*>/g, ""));
-      setDescription(description.replace(/<img[^>]*>/g, ""));
+      setDescription(item.description.replace("<p>", ""));
+      setDescription(item.description.replace("</p>", ""));
+      setDescription(
+        item.description.replace(/<img[^>]*>/g, "").replace(/<p[^>]*>/g, "")
+      );
+      console.log(description);
     } else {
       setDescription(item.description);
     }
@@ -23,21 +27,25 @@ const CardItem: React.FC<CardItemProps> = ({ item }) => {
 
   return (
     <Card
-      className="mb-5 transition-transform duration-300 hover:scale-103 dark:border-slate-300"
+      className="mb-5 transition-transform duration-300 hover:scale-101 dark:border-slate-300"
       onClick={() => window.open(item.link)}
     >
-      <div className="flex flex-col sm:flex-row dark:bg-gray-900 dark:text-white rounded-xl">
-        <div className="w-full sm:max-w-max h-44 overflow-hidden">
-          <img
-            className="object-fill w-full h-full rounded-t-xl sm:rounded-l-xl sm:rounded-r-none"
-            src={item["media:content"]?.["@_url"] || fallbackImage}
-            alt={item.title}
-          />
+      <div className="flex flex-col sm:flex-row dark:bg-darkMode dark:text-white rounded-xl">
+        <div className="flex w-full sm:w-48 justify-center">
+          <div className="w-full sm:w-52 h-32 overflow-hidden">
+            <img
+              className="object-fill w-full h-full rounded-xl"
+              src={item["media:content"]?.["@_url"] || fallbackImage}
+              alt={item.title}
+            />
+          </div>
         </div>
         <div className="p-4 flex flex-col justify-between">
-          <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+          <p className="text-lg font-semibold mb-2 text-left text-lg">
+            {item.title}
+          </p>
           <p
-            className="text-gray-700 dark:text-white"
+            className="text-gray-700 dark:text-white text-left text-sm"
             dangerouslySetInnerHTML={{ __html: description }}
           ></p>
         </div>

@@ -7,7 +7,7 @@ const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
 
   return (
-    <header className="px-8 py-4 dark:bg-gray-900">
+    <header className="px-8 py-4 dark:bg-darkMode">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
@@ -49,7 +49,7 @@ const Header = () => {
           </Link>
           <button
             onClick={toggleDarkMode}
-            className="p-2 rounded-md bg-gray-800 text-white dark:bg-gray-300 dark:text-gray-800"
+            className="p-2 text-black dark:bg-darkMode dark:text-white"
           >
             {darkMode ? (
               <SunIcon className="h-6 w-6" />
