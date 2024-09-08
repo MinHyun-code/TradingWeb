@@ -4,7 +4,7 @@ import React from "react";
 
 function MainLayout() {
   return (
-    <div className="dark:bg-gray-900 h-screen">
+    <div className="dark:bg-darkMode h-screen">
       <Header></Header>
       <Main></Main>
     </div>

@@ -34,29 +34,7 @@ const LeftSideBar: React.FC = () => {
 
   return (
     <div>
-      {/* PC */}
-      <aside
-        className={`hidden md:block p-4 ${basePath ? "w-40" : "w-32"}`} // 모바일에서는 숨기기, 큰 화면에서는 고정 너비
-      >
-        <div className="flex flex-col space-y-4">
-          {currentMenu.map((item) => (
-            <button
-              key={item.value}
-              className={`text-left font-semibold ${
-                isActive(item.value)
-                  ? "text-slate-900 dark:text-white"
-                  : "text-slate-500"
-              }`}
-              onClick={() => navigate("/" + basePath + "/" + item.value)}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
-      </aside>
-
-      {/* 모바일 */}
-      <div className="block md:hidden w-full">
+      <div className="block w-full mt-5 mb-5">
         <div className="flex justify-evenly">
           {currentMenu.map((item) => (
             <button
