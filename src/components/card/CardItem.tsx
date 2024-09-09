@@ -19,7 +19,6 @@ const CardItem: React.FC<CardItemProps> = ({ item }) => {
       setDescription(
         item.description.replace(/<img[^>]*>/g, "").replace(/<p[^>]*>/g, "")
       );
-      console.log(description);
     } else {
       setDescription(item.description);
     }

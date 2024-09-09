@@ -2,6 +2,7 @@ import { useNewsList } from "@/hooks/news/NewsApi";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import CardItem from "@/components/card/CardItem";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const News = () => {
   const navigate = useNavigate();
@@ -24,8 +25,8 @@ const News = () => {
   // 30개까지만 슬라이스
   const displayedItems = items.slice(0, MAX_ITEMS);
 
-  if (!Array.isArray(dataList?.rss.channel.item)) {
-    return <p>No data available</p>; // 데이터가 없을 때의 메시지
+  if (dataList?.rss.channel.item === undefined) {
+    return <LoadingSpinner />;
   }
 
   return (

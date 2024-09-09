@@ -3,7 +3,7 @@ import React from "react";
 const LoadingSpinner: React.FC = () => {
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-100 z-50" // 화면 전체를 덮는 스타일
+      className="fixed top-0 left-0 w-full h-full flex items-center justify-center dark:bg-darkMode z-50" // 화면 전체를 덮는 스타일
     >
       <svg
         className="animate-spin h-12 w-12 text-gray-600" // 스피너 스타일
