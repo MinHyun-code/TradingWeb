@@ -8,6 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  // 이메일 인증 여부 추가
+  const [showElement, setShowElement] = useState<boolean>(false);
+  
   const { toast } = useToast();
 
   const { checkAuthEmailApi } = useCheckAuthEmail();
@@ -18,8 +21,16 @@ const Login = () => {
       return;
     }
 
-    const result = checkAuthEmailApi(email);
-    console.log(result);
+    const result = await checkAuthEmailApi(email);
+
+    if(result === "ne") {
+      toast({
+        title: "",
+        description: "존재하지 않는 이메일입니다.",
+      });
+    } else if(result === "na") {
+      setShowElement(true);
+    }
   };
 
   // Validation Check
@@ -47,7 +58,11 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일"
           />
-          <Button onClick={checkEmail}>다음</Button>
+          {showElement ? (
+            <Button onClick={checkEmail}>로그인</Button>
+          ) : (
+            <Button onClick={checkEmail}>다음</Button>
+          )}
           <div className="mt-4">
             {/* <GoogleLogin
               onSuccess={(credentialResponse) => {

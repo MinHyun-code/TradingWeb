@@ -12,7 +12,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({ value, onChange }) => {
   // const handleClick = () => setShow(!show);
 
   return (
-    <div className="flex">
+    <div className="flex text-black">
       <Input
         // type={show ? "text" : "password"}
         type="password"
