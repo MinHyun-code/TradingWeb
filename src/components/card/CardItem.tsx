@@ -7,7 +7,7 @@ interface CardItemProps {
 }
 
 const CardItem: React.FC<CardItemProps> = ({ item }) => {
-  const fallbackImage = "https://via.placeholder.com/240";
+  const fallbackImage = "/images/no_image.png";
   const [description, setDescription] = useState("");
 
   const currentPath = location.pathname;
