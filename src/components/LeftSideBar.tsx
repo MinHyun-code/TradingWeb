@@ -39,7 +39,7 @@ const LeftSideBar: React.FC = () => {
           {currentMenu.map((item) => (
             <button
               key={item.value}
-              className={`font-medium ${
+              className={`font-semibold ${
                 isActive(item.value)
                   ? "text-slate-900 dark:text-white"
                   : "text-slate-500"
