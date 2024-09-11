@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import PasswordInput from "@/components/common/PasswordInput";
@@ -12,10 +12,16 @@ const SignUp = () => {
   const { signUpApi } = useSignUp();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordTemp, setPasswordTemp] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState<boolean>(false);
   const [name, setName] = useState("");
 
   const passwordChange = (newPassword: string) => {
     setPassword(newPassword);
+  };
+
+  const passwordTempChange = (newPassword: string) => {
+    setPasswordTemp(newPassword);
   };
 
   // 비밀번호 암호화 (SHA256)
@@ -32,8 +38,6 @@ const SignUp = () => {
     }
 
     const hashedPassword = await hashFunction(password);
-
-    console.log(hashedPassword);
 
     const param: SignUpData = {
       email: email,
@@ -72,6 +76,14 @@ const SignUp = () => {
     return true;
   };
 
+  useEffect(() => {
+    if (password === passwordTemp) {
+      setPasswordCheck(true);
+    } else {
+      setPasswordCheck(false);
+    }
+  }, [passwordTemp]);
+
   return (
     <>
       <div className="flex w-screen h-screen justify-evenly p-5 items-center dark:bg-darkMode dark:text-white">
@@ -91,6 +103,22 @@ const SignUp = () => {
             <div className="text-xs text-slate-400 mt-3">
               <PasswordInput value={password} onChange={passwordChange} />
               영문,숫자,특수문자를 포함하여 최소 8자 이상
+            </div>
+
+            <div className="text-xs text-slate-400 mt-3">
+              <PasswordInput
+                value={passwordTemp}
+                onChange={passwordTempChange}
+              />
+              {passwordTemp === "" ? (
+                <span></span>
+              ) : passwordCheck ? (
+                <span className="text-blue-700">비밀번호가 일치합니다.</span>
+              ) : (
+                <span className="text-red-700">
+                  비밀번호가 일치하지 않습니다.
+                </span>
+              )}
             </div>
 
             <div className="text-xs text-slate-400 mt-3">
