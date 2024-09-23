@@ -20,7 +20,6 @@ function CommonRouter() {
         {/* // <Route>의 element에 레이아웃을 넣어준다. */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/idea" element={<Idea />}></Route>
           <Route path="/interest" element={<Interest />}></Route>
           <Route path="/market" element={<Market />}></Route>
           <Route path="/chart" element={<ChartView />}></Route>
@@ -32,6 +31,8 @@ function CommonRouter() {
         <Route element={<LeftSideLayout />}>
           <Route path="/news" element={<News />}></Route>
           <Route path="/news/:id" element={<News />}></Route>
+          <Route path="/idea" element={<Idea />}></Route>
+          <Route path="/idea/:id" element={<Idea />}></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>

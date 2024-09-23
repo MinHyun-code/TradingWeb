@@ -1,7 +1,7 @@
 import React from "react";
 import Main from "@/components/Main";
 import Header from "@/components/Header";
-import LeftSideBar from "@/components/LeftSideBar";
+import LeftSideBar from "@/components/NavbarLayout";
 
 const LeftSideLayout: React.FC = () => {
   return (
