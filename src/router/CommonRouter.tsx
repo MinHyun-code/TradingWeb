@@ -4,6 +4,7 @@ import Home from "@/pages/Home";
 import Login from "@/pages/auth/Login";
 import SignUp from "@/pages/auth/SignUp";
 import Idea from "@/pages/idea/Idea";
+import Feed from "@/pages/feed/Feed";
 import News from "@/pages/news/News";
 import Interest from "@/pages/interest/Interest";
 import Market from "@/pages/market/Market";
@@ -23,6 +24,8 @@ function CommonRouter() {
           <Route path="/interest" element={<Interest />}></Route>
           <Route path="/market" element={<Market />}></Route>
           <Route path="/chart" element={<ChartView />}></Route>
+          <Route path="/idea" element={<Idea />}></Route>
+          <Route path="/feed" element={<Feed />}></Route>
           <Route
             path="/test"
             element={<PrivateRoute element={<Test />} />}
@@ -31,8 +34,6 @@ function CommonRouter() {
         <Route element={<LeftSideLayout />}>
           <Route path="/news" element={<News />}></Route>
           <Route path="/news/:id" element={<News />}></Route>
-          <Route path="/idea" element={<Idea />}></Route>
-          <Route path="/idea/:id" element={<Idea />}></Route>
         </Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>

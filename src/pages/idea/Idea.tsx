@@ -1,29 +1,42 @@
-import { useNavigate } from "react-router-dom";
-import CoinListModal from "@/components/modal/CoinListModal";
+import Modal from "@/components/modal/Modal";
 import { useState } from "react";
-import IdeaAddForm from "@/components/addForm/IdeaAddForm";
+import IdeaAdd from "@/components/modal/IdeaAdd";
+import { Button } from "@/components/ui/button";
+import { useIdeaList, boardListReq } from "@/hooks/idea/ideaApi";
 
 const Idea = () => {
-  const navigate = useNavigate();
+  const { IdeaListApi } = useIdeaList();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const testParam: boardListReq = {
+    page: 1,
+    pageSize: 20,
+  };
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   return (
     <>
-      <div className="flex flex-col"></div>
-      <button
-        onClick={openModal}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Open Modal
-      </button>
+      <div className="flex flex-col items-center mt-10">
+        <div className="sm:w-[1000px] min-w-80 border border-slate-300 rounded-lg">
+          <Button onClick={openModal} variant="outline" className="w-full">
+            <span className="dark:text-white">작성</span>
+          </Button>
+        </div>
+        <Button
+          onClick={IdeaListApi(testParam)}
+          variant="outline"
+          className="w-full"
+        >
+          <span className="dark:text-white">test</span>
+        </Button>
+      </div>
 
-      <CoinListModal isOpen={isModalOpen} onClose={closeModal}>
-        <IdeaAddForm />
-      </CoinListModal>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <IdeaAdd />
+      </Modal>
     </>
   );
 };

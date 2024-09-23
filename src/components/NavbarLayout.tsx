@@ -7,10 +7,6 @@ const menuData = {
     { name: "코인데스크", value: "coindesk" },
     { name: "코인텔레그래프", value: "cointelegraph" },
   ],
-  idea: [
-    { name: "아이디어", value: "" },
-    { name: "피드", value: "feed" },
-  ],
   home: [{ name: "코인텔레그래프", value: "cointelegraph" }],
 };
 
@@ -28,9 +24,6 @@ const LeftSideBar: React.FC = () => {
     if (basePath === "news") {
       return menuData.news;
     }
-    if (basePath === "idea") {
-      return menuData.idea;
-    }
     return menuData.home; // 기본 메뉴 항목
   }, [basePath]);
 
@@ -40,6 +33,10 @@ const LeftSideBar: React.FC = () => {
       return currentPath === `/${basePath}`;
     }
     return currentPath === `/${basePath}/${value}`;
+  };
+
+  const menuMove = (value: string) => {
+    navigate("/" + value);
   };
 
   return (
@@ -54,7 +51,7 @@ const LeftSideBar: React.FC = () => {
                   ? "text-slate-900 dark:text-white"
                   : "text-slate-500"
               }`}
-              onClick={() => navigate("/" + basePath + "/" + item.value)}
+              onClick={() => menuMove(item.value)}
             >
               {item.name}
             </button>

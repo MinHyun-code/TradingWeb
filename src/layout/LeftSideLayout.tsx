@@ -5,7 +5,7 @@ import LeftSideBar from "@/components/NavbarLayout";
 
 const LeftSideLayout: React.FC = () => {
   return (
-    <div className="dark:bg-darkMode">
+    <div className="dark:bg-darkMode min-h-screen">
       <Header />
       <div className="flex justify-evenly">
         <main className="flex flex-col mt-4 container w-screen md:w-10/12">
