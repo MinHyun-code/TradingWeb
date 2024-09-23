@@ -2,6 +2,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface PrivateRouteProps {
   element: React.ReactElement;
@@ -13,7 +14,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
 
   // 상태가 결정될 때까지 로딩 상태를 보여줍니다.
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return isAuthenticated ? (

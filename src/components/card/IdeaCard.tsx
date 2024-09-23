@@ -6,7 +6,7 @@ interface CardItemProps {
   item: Item;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ item }) => {
+const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
   const fallbackImage = "https://via.placeholder.com/240";
   const [description, setDescription] = useState("");
 
@@ -53,4 +53,4 @@ const CardItem: React.FC<CardItemProps> = ({ item }) => {
   );
 };
 
-export default CardItem;
+export default IdeaCard;
