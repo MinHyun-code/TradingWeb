@@ -59,7 +59,12 @@ export const useLogin = () => {
           duration: 2000,
         });
 
-        login(response.data.result.userRes.email);
+        login(
+          response.data.result.userRes.email,
+          response.data.result.userRes.userId,
+          response.data.result.accessToken,
+          response.data.result.refreshTokenKey
+        );
         navigate("/");
       }
     } catch (error) {

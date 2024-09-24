@@ -1,11 +1,13 @@
 import Modal from "@/components/modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IdeaAdd from "@/components/modal/IdeaAdd";
 import { Button } from "@/components/ui/button";
 import { useIdeaList, boardListReq } from "@/hooks/idea/ideaApi";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import IdeaCard from "@/components/card/IdeaCard";
 
 const Idea = () => {
-  const { IdeaListApi } = useIdeaList();
+  const { ideaListApi, dataList } = useIdeaList();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -17,21 +19,40 @@ const Idea = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  useEffect(() => {
+    ideaListApi(testParam);
+  }, []);
+
+  if (dataList === undefined) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <div className="flex flex-col items-center mt-10">
-        <div className="sm:w-[1000px] min-w-80 border border-slate-300 rounded-lg">
-          <Button onClick={openModal} variant="outline" className="w-full">
+        <div className="sm:w-[1300px] min-w-80 rounded-lg">
+          <Button
+            onClick={openModal}
+            variant="outline"
+            className="w-full mb-10"
+          >
             <span className="dark:text-white">작성</span>
           </Button>
+          <div className="flex">
+            <div className="sm:w-3/12 border hidden sm:block rounded-lg mr-3">
+              <div className="">Following</div>
+            </div>
+            <div className="sm:w-6/12 border rounded-lg">
+              {dataList.length > 0 &&
+                dataList.map((item, index) => (
+                  <IdeaCard key={index} item={item} />
+                ))}
+            </div>
+            <div className="sm:w-3/12 border hidden sm:block rounded-lg  ml-3">
+              <div className="">Following</div>
+            </div>
+          </div>
         </div>
-        <Button
-          onClick={IdeaListApi(testParam)}
-          variant="outline"
-          className="w-full"
-        >
-          <span className="dark:text-white">test</span>
-        </Button>
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>

@@ -32,13 +32,10 @@ const News = () => {
   return (
     <>
       <div className="flex flex-col">
-        {displayedItems.length > 0 ? (
+        {displayedItems.length > 0 &&
           displayedItems.map((item, index) => (
             <NewsCard key={index} item={item} />
-          ))
-        ) : (
-          <p>No news items</p>
-        )}
+          ))}
       </div>
     </>
   );

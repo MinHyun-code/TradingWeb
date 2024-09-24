@@ -10,7 +10,12 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface AuthContextType {
   isAuthenticated: boolean | null;
-  login: (email: string) => void;
+  login: (
+    email: string,
+    userId: string,
+    accessToken: string,
+    refreshTokenKey: string
+  ) => void;
   logout: () => void;
 }
 
@@ -34,8 +39,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     checkAuth();
   }, []);
 
-  const login = (email: string) => {
+  const login = (
+    email: string,
+    userId: string,
+    accessToken: string,
+    refreshTokenKey: string
+  ) => {
     localStorage.setItem("email", email);
+    localStorage.setItem("userId", userId);
+    localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("refreshTokenKey", refreshTokenKey);
     setIsAuthenticated(true);
   };
 

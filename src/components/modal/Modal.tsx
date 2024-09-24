@@ -14,7 +14,7 @@ const CoinListModal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   const handleBackgroundClick = (e: React.MouseEvent) => {
     // Prevent the modal from closing when clicking inside the modal content
     e.stopPropagation();
-    onClose();
+    // onClose();
   };
 
   // Handle clicks inside the modal content to prevent closing

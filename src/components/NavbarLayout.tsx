@@ -36,7 +36,7 @@ const LeftSideBar: React.FC = () => {
   };
 
   const menuMove = (value: string) => {
-    navigate("/" + value);
+    navigate(`/${basePath}/` + value);
   };
 
   return (
