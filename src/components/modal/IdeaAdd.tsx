@@ -9,14 +9,14 @@ const IdeaAddForm = () => {
 
   const [subject, setSubject] = useState("");
   const [contents, setContents] = useState("");
-  const [tagList, setTagList] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[] | null>(null);
 
   // idea 게시글 생성
   const ideaAdd = async () => {
     const param: boardAddReq = {
       subject: subject,
       contents: contents,
-      tagList: [],
+      tagList: ["test-starbucks111", "iphone-14-plus111"],
     };
 
     await ideaAddApi(param);

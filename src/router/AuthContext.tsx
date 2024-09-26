@@ -10,6 +10,8 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface AuthContextType {
   isAuthenticated: boolean | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   login: (
     email: string,
     userId: string,
@@ -25,6 +27,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
     // 비동기 함수로 로그인 상태를 체크
@@ -34,6 +38,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
+      }
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        setAccessToken(accessToken);
+      } else {
+        setAccessToken(null);
       }
     };
     checkAuth();
@@ -49,11 +59,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.setItem("userId", userId);
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshTokenKey", refreshTokenKey);
+    setAccessToken(accessToken);
+    setRefreshToken(refreshTokenKey);
     setIsAuthenticated(true);
   };
 
   const logout = () => {
     localStorage.removeItem("email");
+    localStorage.removeItem("accessToken");
     setIsAuthenticated(false);
   };
 
@@ -62,7 +75,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, accessToken, refreshToken, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

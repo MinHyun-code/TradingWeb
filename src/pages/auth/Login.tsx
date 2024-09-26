@@ -12,7 +12,7 @@ import {
   MailAuthData,
 } from "@/hooks/auth/authApi";
 import { useToast } from "@/hooks/use-toast";
-import PasswordInput from "@/components/common/PasswordInput";
+import PasswordInput from "@/components/ui/passwordInput";
 import CryptoJS from "crypto-js";
 
 const Login = () => {
@@ -136,6 +136,7 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일"
             onKeyDown={handleEnterPress}
+            disabled={userStatus === "a"}
           />
           {userStatus === "a" ? (
             <div className="text-xs text-slate-400 mt-3">
