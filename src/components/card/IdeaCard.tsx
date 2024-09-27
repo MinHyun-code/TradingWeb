@@ -5,21 +5,27 @@ import ProfileImage from "@/components/ui/profileImg";
 import EllipsisText from "../ui/ellipsisText";
 import DateDisplay from "../ui/dateDisplay";
 import { useIdeaLikeToggle } from "@/hooks/idea/ideaApi";
+import { useFollowAdd } from "@/hooks/mypage/mypageApi";
 
 interface CardItemProps {
   item: boardData;
 }
 
 const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
-  const { ideaLikeToggleApi, result } = useIdeaLikeToggle();
+  const { ideaLikeToggleApi, ideaLikeResult } = useIdeaLikeToggle();
+  const { followAddApi, followAddResult } = useFollowAdd();
   const [liked, setLiked] = useState(item.youLike);
 
   const likeToggle = () => {
     ideaLikeToggleApi(item.boardId);
 
-    if (result) {
+    if (ideaLikeResult) {
       setLiked((prevLiked) => !prevLiked);
     }
+  };
+
+  const followAction = () => {
+    console.log("test");
   };
 
   return (
@@ -39,9 +45,12 @@ const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
                 <DateDisplay isoString={item.cretDatetime}></DateDisplay>
               </span>
             </div>
-            {/* <button className="bg-yellow-400 rounded-lg font-semibold p-1.5 text-xs text-black">
+            <button
+              className="bg-yellow-400 rounded-lg font-semibold p-1.5 text-xs text-black"
+              onClick={followAction}
+            >
               follow
-            </button> */}
+            </button>
           </div>
           <div className="cursor-pointer sm:mr-10 sm:ml-10">
             <div className="font-semibold mb-7 tracking-wide">

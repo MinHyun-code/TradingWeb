@@ -1,6 +1,6 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
 import { useEffect, useState } from "react";
-import { useAuth, isAuthenticated } from "@/router/AuthContext";
+import { useAuth } from "@/router/AuthContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 
@@ -12,6 +12,7 @@ export type boardData = {
   cretName: string;
   cretUserGrade: string;
   cretDatetime: string;
+  cretId: string;
   viewCount: number;
   likeCount: number;
   commentCount: number;
@@ -90,7 +91,7 @@ export const useIdeaAdd = () => {
 export const useIdeaLikeToggle = () => {
   const { accessToken } = useAuth();
   const { toast } = useToast();
-  const [result, setResult] = useState<boolean>(false);
+  const [ideaLikeResult, setIdeaLikeResult] = useState<boolean>(false);
   const ideaLikeToggleApi = async (param: string) => {
     try {
       await axiosInstance.post(
@@ -103,7 +104,7 @@ export const useIdeaLikeToggle = () => {
         }
       );
 
-      setResult(true);
+      setIdeaLikeResult(true);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
@@ -123,10 +124,10 @@ export const useIdeaLikeToggle = () => {
     }
   };
 
-  useEffect(() => {}, [result]);
+  useEffect(() => {}, [ideaLikeResult]);
 
   return {
     ideaLikeToggleApi,
-    result,
+    ideaLikeResult,
   };
 };
