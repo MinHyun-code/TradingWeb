@@ -1,15 +1,15 @@
 import React from "react";
 import Main from "@/components/Main";
 import Header from "@/components/Header";
-import LeftSideBar from "@/components/NavbarLayout";
+import TopNavbar from "@/components/navbar/TopNavbar";
 
-const LeftSideLayout: React.FC = () => {
+const NewsLayout: React.FC = () => {
   return (
     <div className="dark:bg-darkMode min-h-screen">
       <Header />
       <div className="flex justify-evenly">
         <main className="flex flex-col mt-4 container w-screen md:w-10/12">
-          <LeftSideBar />
+          <TopNavbar />
           <Main />
         </main>
       </div>
@@ -17,4 +17,4 @@ const LeftSideLayout: React.FC = () => {
   );
 };
 
-export default LeftSideLayout;
+export default NewsLayout;

@@ -29,12 +29,6 @@ const Header = () => {
               아이디어
             </Link>
             <Link
-              to="/feed"
-              className="font-semibold text-slate-900 dark:text-white"
-            >
-              피드
-            </Link>
-            <Link
               to="/news"
               className="font-semibold text-slate-900 dark:text-white"
             >

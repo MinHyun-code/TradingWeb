@@ -3,14 +3,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const menuData = {
   news: [
-    { name: "매일경제", value: "mk" },
-    { name: "코인데스크", value: "coindesk" },
-    { name: "코인텔레그래프", value: "cointelegraph" },
+    { name: "매일경제", value: "/mk" },
+    { name: "코인데스크", value: "/coindesk" },
+    { name: "코인텔레그래프", value: "/cointelegraph" },
   ],
-  home: [{ name: "코인텔레그래프", value: "cointelegraph" }],
+  home: [{ name: "home", value: "" }],
 };
 
-const LeftSideBar: React.FC = () => {
+const TopNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,11 +32,11 @@ const LeftSideBar: React.FC = () => {
     if (value === "") {
       return currentPath === `/${basePath}`;
     }
-    return currentPath === `/${basePath}/${value}`;
+    return currentPath === `/${basePath}${value}`;
   };
 
   const menuMove = (value: string) => {
-    navigate(`/${basePath}/` + value);
+    navigate(`/${basePath}` + value);
   };
 
   return (
@@ -62,4 +62,4 @@ const LeftSideBar: React.FC = () => {
   );
 };
 
-export default LeftSideBar;
+export default TopNavbar;

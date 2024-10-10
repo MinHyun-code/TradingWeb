@@ -1,16 +1,17 @@
 import { Routes, Route } from "react-router-dom";
-import MainLayout from "@/layout/MainLayout";
 import Home from "@/pages/Home";
 import Login from "@/pages/auth/Login";
 import SignUp from "@/pages/auth/SignUp";
 import Idea from "@/pages/idea/Idea";
-import Feed from "@/pages/feed/Feed";
 import News from "@/pages/news/News";
 import Interest from "@/pages/interest/Interest";
 import Market from "@/pages/market/Market";
 import ChartView from "@/pages/market/ChartView";
-import LeftSideLayout from "@/layout/LeftSideLayout";
 import Test from "@/pages/test";
+
+import MainLayout from "@/layout/MainLayout";
+import NewsLayout from "@/layout/NewsLayout";
+
 import PrivateRoute from "./PrivateRoute";
 import { AuthProvider } from "./AuthContext";
 
@@ -25,16 +26,17 @@ function CommonRouter() {
           <Route path="/market" element={<Market />}></Route>
           <Route path="/chart" element={<ChartView />}></Route>
           <Route path="/idea" element={<Idea />}></Route>
-          <Route path="/feed" element={<Feed />}></Route>
+          <Route path="/idea/:id" element={<Idea />}></Route>
           <Route
             path="/test"
             element={<PrivateRoute element={<Test />} />}
           ></Route>
         </Route>
-        <Route element={<LeftSideLayout />}>
+        <Route element={<NewsLayout />}>
           <Route path="/news" element={<News />}></Route>
           <Route path="/news/:id" element={<News />}></Route>
         </Route>
+
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
         {/* <Route element={<SubLayout />}>

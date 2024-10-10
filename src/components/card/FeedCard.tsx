@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { boardData } from "@/hooks/idea/ideaApi";
+import { feedData } from "@/hooks/idea/feedApi";
 import { Card } from "@/components/ui/card";
 import ProfileImage from "@/components/ui/profileImg";
 import EllipsisText from "../ui/ellipsisText";
@@ -8,7 +8,7 @@ import { useIdeaLikeToggle } from "@/hooks/idea/ideaApi";
 // import { useFollow, FollowReq } from "@/hooks/mypage/mypageApi";
 
 interface CardItemProps {
-  item: boardData;
+  item: feedData;
 }
 
 const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
@@ -18,7 +18,7 @@ const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
   const [likeCount, setLikeCount] = useState(item.likeCount);
 
   const likeToggle = async () => {
-    const result = await ideaLikeToggleApi(item.boardId);
+    const result = await ideaLikeToggleApi(item.feedId);
 
     if (result) {
       console.log(likeCount);
@@ -48,13 +48,13 @@ const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
             <div className="flex items-center">
               <div className="cursor-pointer flex items-center">
                 <ProfileImage />
-                <span className="ml-3">{item.cretName}</span>
+                <span className="ml-3">{item.createdByName}</span>
               </div>
               <span className="p-1 ml-1 text-sm text-blue-500">
-                {item.cretUserGrade}
+                {item.createdByUserGrade}
               </span>
               <span className="text-xs ml-1 text-slate-400 font-medium">
-                <DateDisplay isoString={item.cretDatetime}></DateDisplay>
+                <DateDisplay isoString={item.createdDatetime}></DateDisplay>
               </span>
             </div>
             {/* <button

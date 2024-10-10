@@ -1,5 +1,5 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/router/AuthContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
@@ -35,7 +35,7 @@ export type boardAddReq = {
 
 // 아이디어 조회 API
 export const useIdeaList = () => {
-  const [dataList, setDataList] = useState<boardData[]>();
+  const [ideaList, setIdeaList] = useState<boardData[]>();
   const { accessToken, isAuthenticated } = useAuth();
 
   const ideaListApi = async (param: boardListReq) => {
@@ -47,12 +47,12 @@ export const useIdeaList = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setDataList(response.data.result.boardList);
+        setIdeaList(response.data.result.boardList);
       } else {
         const response = await axiosInstance.get(`/api/boards`, {
           params: param,
         });
-        setDataList(response.data.result.boardList);
+        setIdeaList(response.data.result.boardList);
       }
     } catch (error) {
       console.error("데이터 요청 오류:", error);
@@ -61,7 +61,7 @@ export const useIdeaList = () => {
 
   return {
     ideaListApi,
-    dataList,
+    ideaList,
   };
 };
 
@@ -91,7 +91,6 @@ export const useIdeaAdd = () => {
 export const useIdeaLikeToggle = () => {
   const { accessToken } = useAuth();
   const { toast } = useToast();
-  const [ideaLikeResult, setIdeaLikeResult] = useState<boolean>(false);
   const ideaLikeToggleApi = async (param: string) => {
     try {
       await axiosInstance.post(
@@ -103,8 +102,7 @@ export const useIdeaLikeToggle = () => {
           },
         }
       );
-
-      setIdeaLikeResult(true);
+      return true;
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
@@ -121,13 +119,11 @@ export const useIdeaLikeToggle = () => {
         });
       }
       console.error("오류:", error);
+      return false;
     }
   };
 
-  useEffect(() => {}, [ideaLikeResult]);
-
   return {
     ideaLikeToggleApi,
-    ideaLikeResult,
   };
 };
