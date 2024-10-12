@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/router/AuthContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 export type boardData = {
   boardId: string;
@@ -89,10 +90,16 @@ export const useIdeaAdd = () => {
 
 // 좋아요 토글 API
 export const useIdeaLikeToggle = () => {
+  const navigate = useNavigate();
   const { accessToken } = useAuth();
   const { toast } = useToast();
   const ideaLikeToggleApi = async (param: string) => {
     try {
+      // 로그인 안했을 경우 로그인 화면으로 이동
+      if(accessToken === null) {
+        navigate("/login");
+        return;
+      }
       await axiosInstance.post(
         `/api/boards/toggle-like`,
         { boardId: param },
@@ -106,8 +113,8 @@ export const useIdeaLikeToggle = () => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const errorMessage =
-          error.response.data?.result?.message ||
-          "좋아요 중 오류가 발생했습니다.";
+        error.response.data?.result?.message ||
+        "좋아요 중 오류가 발생했습니다.";
         toast({
           description: errorMessage,
           duration: 2000,

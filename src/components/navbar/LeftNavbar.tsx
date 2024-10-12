@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTheme } from "@/ThemeProvider";
 
 interface MenuData {
   idea: MenuItem[];
@@ -35,6 +36,7 @@ const menuData: MenuData = {
 const LeftNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { darkMode } = useTheme();
 
   const currentPath = location.pathname;
 
@@ -80,7 +82,7 @@ const LeftNavbar: React.FC = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   className="w-6 h-6"
-                  fill={`${isActive(item.value) ? "" : "#64748b"}`}
+                  fill={isActive(item.value) ? (darkMode ? "#ffffff" : "") : "#64748b"} 
                 >
                   {item.svg}
                 </svg>

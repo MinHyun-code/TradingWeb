@@ -57,7 +57,7 @@ export const useFeedList = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setFeedList(response.data.result.boardList);
+        setFeedList(response.data.result.feedList);
       } else {
         const response = await axiosInstance.get(`/api/feeds`, {
           params: param,

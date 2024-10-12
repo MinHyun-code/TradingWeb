@@ -27,6 +27,7 @@ function CommonRouter() {
           <Route path="/chart" element={<ChartView />}></Route>
           <Route path="/idea" element={<Idea />}></Route>
           <Route path="/idea/:id" element={<Idea />}></Route>
+          <Route path="/idea/:id/:item" element={<Idea />}></Route>
           <Route
             path="/test"
             element={<PrivateRoute element={<Test />} />}

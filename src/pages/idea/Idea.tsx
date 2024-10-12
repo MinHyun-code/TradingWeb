@@ -28,13 +28,26 @@ const Idea = () => {
   const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
+    // idea 조회
     if (id === undefined) {
       const testParam: searchReq = {
         page: 1,
         pageSize: 20,
       };
       ideaListApi(testParam);
-    } else if (id === "feed") {
+    } 
+    // feed 조회
+    else if (id === "feed") {
+      const test2Param: searchReq = {
+        page: 1,
+        pageSize: 20,
+        type: "COIN",
+        code: "Btc",
+      };
+      feedListApi(test2Param);
+    }
+    // idea, feed 상세 조회
+    else if (id === "post") {
       const test2Param: searchReq = {
         page: 1,
         pageSize: 20,
@@ -56,6 +69,7 @@ const Idea = () => {
               </div>
             </div>
             <div className="sm:w-6/12 w-screen border sm:rounded-2xl min-h-screen">
+              <div className="pt-3">
               {id === undefined &&
                 ideaList &&
                 ideaList.length > 0 &&
@@ -69,12 +83,12 @@ const Idea = () => {
                 feedList.map((item, index) => (
                   <FeedCard key={index} item={item} />
                 ))}
+              </div>
             </div>
-            <div className="sm:w-3/12 border hidden sm:block rounded-lg ml-3">
+            <div className="sm:w-3/12 hidden sm:block ml-3">
               <div>
                 <Input placeholder="search..." />
               </div>
-              <div className="">Following</div>
             </div>
           </div>
         </div>
