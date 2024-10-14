@@ -95,7 +95,7 @@ useEffect(() => {
     rootMargin: "0px",
     threshold: 1.0, // 100% 보여졌을 때 트리거
   });
- 
+
   if (target) {
     observerRef.current.observe(target);  // 트리거 요소 관찰 시작
   }
