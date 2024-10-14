@@ -54,7 +54,7 @@ const Idea = () => {
         type: "COIN",
         code: "Btc",
       };
-      feedListApi(test2Param);
+      feedListApi(test2Param); 
     }
   }, [id]);
 
