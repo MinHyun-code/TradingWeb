@@ -128,7 +128,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="flex flex-col items-center mt-10">
+      <div className="flex flex-col items-center mt-10"> 
         <div className="sm:w-[1300px] min-w-80 rounded-lg">
           <div className="flex">
             <div className="sm:w-3/12 sm:flex hidden sm:block mr-3 flex-row-reverse">
