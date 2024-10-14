@@ -72,6 +72,12 @@ const IdeaCard: React.FC<CardItemProps> = ({ item }) => {
               <EllipsisText text={item.contents} maxLines={10}></EllipsisText>
             </div>
           </div>
+          <div className="mb-7">
+            <div className="cursor-pointer flex items-center">
+              {/* <ProfileImage /> */}
+              <span className="ml-3 font-semibold text-sm border rounded-lg p-1 border-slate-900">{item.coinCode}</span>
+            </div>
+          </div>
           <div className="text-yellow-500 font-semibold flex">
             {item.tagList.length > 0 &&
               item.tagList.map((tag, index) => (
