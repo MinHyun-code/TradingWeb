@@ -1,11 +1,10 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
-import { useState } from "react";
 import { useAuth } from "@/router/AuthContext";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 
-export type boardData = {
+export interface boardData {
   boardId: string;
   heroImgUrl: string;
   subject: string;
@@ -23,9 +22,11 @@ export type boardData = {
   youAreFollowing: boolean;
 };
 
-export type boardListReq = {
+export type listReq = {
   page: number;
   pageSize: number;
+  code?: string;
+  type?: string;
 };
 
 export type boardAddReq = {
@@ -36,10 +37,9 @@ export type boardAddReq = {
 
 // 아이디어 조회 API
 export const useIdeaList = () => {
-  const [ideaList, setIdeaList] = useState<boardData[]>();
   const { accessToken, isAuthenticated } = useAuth();
 
-  const ideaListApi = async (param: boardListReq) => {
+  const ideaListApi = async (param: listReq) => {
     try {
       if (isAuthenticated === true) {
         const response = await axiosInstance.get("/api/boards", {
@@ -48,21 +48,21 @@ export const useIdeaList = () => {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-        setIdeaList(response.data.result.boardList);
+        return response.data.result.boardList;
       } else {
         const response = await axiosInstance.get(`/api/boards`, {
           params: param,
         });
-        setIdeaList(response.data.result.boardList);
+        return response.data.result.boardList;
       }
     } catch (error) {
       console.error("데이터 요청 오류:", error);
+      throw error;
     }
   };
 
   return {
-    ideaListApi,
-    ideaList,
+    ideaListApi
   };
 };
 
