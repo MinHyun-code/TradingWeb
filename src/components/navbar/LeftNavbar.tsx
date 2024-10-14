@@ -65,8 +65,8 @@ const LeftNavbar: React.FC = () => {
 
   return (
     <div>
-      <div className="block w-full">
-        <div className="flex flex-col">
+      <div className="block sm:fixed">
+        <div className="flex sm:flex-col justify-evenly">
           {currentMenu.map((item) => (
             <a
               key={item.value}

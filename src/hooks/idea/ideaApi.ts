@@ -25,6 +25,7 @@ export interface boardData {
 export type listReq = {
   page: number;
   pageSize: number;
+  keyword?: string;
   code?: string;
   type?: string;
 };
