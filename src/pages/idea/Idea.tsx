@@ -1,20 +1,21 @@
-import Modal from "@/components/modal/Modal";
 import { useCallback, useEffect, useRef, useState } from "react";
-import IdeaAdd from "@/components/modal/IdeaAdd";
 import { Button } from "@/components/ui/button";
-import { useIdeaList, boardData, listReq } from "@/hooks/idea/ideaApi";
+import { useIdeaList, boardData, listReq, useIdeaAdd, boardAddReq } from "@/hooks/idea/ideaApi";
 import { useFeedList, feedData } from "@/hooks/idea/feedApi";
 import IdeaCard from "@/components/card/IdeaCard";
 import FeedCard from "@/components/card/FeedCard";
 import { Input } from "@/components/ui/input";
 import LeftNavbar from "@/components/navbar/LeftNavbar";
 import { useParams } from "react-router-dom";
+import AutoResizeTextarea from "@/components/ui/autoResizeTextarea";
+import TagInput from "@/components/ui/tagInput"
 
 const Idea = () => {
+
+  /* 조회 로직 */
   const { ideaListApi } = useIdeaList();
   const { feedListApi } = useFeedList();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
   const [ideaList, setIdeaList] = useState<boardData[]>([]); // 받아온 데이터 저장
   const [feedList, setFeedList] = useState<feedData[]>([]); // 받아온 데이터 저장
@@ -25,8 +26,6 @@ const Idea = () => {
   const [urlId, setUrlId] = useState<string|undefined>(id);
   const [ideaKeyword, setIdeaKeyword] = useState<string>("");
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
   // 데이터 요청 함수
   const loadMoreData = useCallback(async (id:string|undefined) => {
     try {
@@ -42,7 +41,6 @@ const Idea = () => {
       // idea 조회
       if (id === undefined) {
 
-        console.log(ideaKeyword);
         if(ideaKeyword != "") {
           param.keyword = ideaKeyword;
           setIdeaList([]);
@@ -74,7 +72,7 @@ const Idea = () => {
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, ideaKeyword]);
 
   // IntersectionObserver로 트리거 감지
   const observerCallback = useCallback(
@@ -115,17 +113,40 @@ const Idea = () => {
     };
   }, [observerCallback]);
 
+  // 검색
+  const searchData = () => {
+    scrollTop();
+    if(page === 1) {
+      loadMoreData(id);
+    }
+    else {
+      setPage(1);
+    }
+  }
+
+  // Enter Key 이벤트
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      loadMoreData(id);
+    }
+  };
+
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,    // 스크롤을 위로 설정
+      behavior: 'smooth'  // 부드럽게 스크롤
+    });
+  }
+
+
   // ID가 변경될 때 실행
   useEffect(() => {
     if (urlId !== id) {
-      window.scrollTo({
-        top: 0,    // 스크롤을 위로 설정
-        behavior: 'smooth'  // 부드럽게 스크롤
-      });
-
+      scrollTop();
       setIdeaList([]);
       setFeedList([]);
       setUrlId(id); // URL ID 업데이트
+      setIdeaKeyword("");
       
       // 페이지가 1이 아니면 페이지를 1로 설정하고 로딩을 멈춤
       if (page !== 1) {
@@ -141,13 +162,32 @@ const Idea = () => {
   }, [id, urlId, page]); // id, urlId, page가 변경될 때 실행
 
   // 페이지가 변경될 때 실행
-  useEffect(() => {
+  useEffect(() => { 
     // 첫 입장 시 이미 page가 1이면 데이터를 로드하지 않음 (위에서 처리됨)
     if (page !== 1) {
       loadMoreData(id);
     }
   }, [page]); // page만 의존성으로 설정
 
+  /* 저장 로직 */
+
+  // issue 저장 변수
+  const [subject, setSubject] = useState("");
+  const [contents, setContents] = useState("");
+  const [tagList, setTagList] = useState<string[] | null>(null);
+
+  const { ideaAddApi } = useIdeaAdd();
+
+  // idea 게시글 생성
+  const ideaAdd = async () => {
+    const param: boardAddReq = {
+      subject: subject,
+      contents: contents,
+      tagList: tagList,
+    };
+
+    await ideaAddApi(param);
+  };
 
   return (
     <>
@@ -160,30 +200,65 @@ const Idea = () => {
               </div>
             </div>
             <div className="sm:w-6/12 w-screen border sm:rounded-2xl min-h-screen">
-              <div className="pt-3">
-              {id === undefined &&
-                ideaList &&
-                ideaList.length > 0 &&
-                ideaList.map((item, index) => (
-                  <IdeaCard key={index} item={item} />
-                ))}
+              <div className="pt-10">
+                <div className="border-t border-b flex justify-center">
+                  <div className="mt-8 mb-8 w-4/5">
+                    <Input
+                      placeholder="제목"
+                      className="mb-5"
+                      onChange={(e) => setSubject(e.target.value)}
+                    />
+                    <TagInput onChange={setTagList}/>
+                    <AutoResizeTextarea value={contents} onChange={setContents}/>
+                    <div className="flex justify-end mt-5">
+                      <Button onClick={ideaAdd}>Post</Button>
+                    </div>
+                  </div>
+                </div>
+                {id === undefined && ideaList && (
+                  ideaList.length > 0 ? (
+                  ideaList.map((item, index) => (
+                    <IdeaCard key={index} item={item} />
+                  ))
+                  ) : (
+                    <p>데이터가 없습니다.</p>
+                  )
+                )}
 
-              {id === "feed" &&
-                feedList &&
-                feedList.length > 0 &&
-                feedList.map((item, index) => (
-                  <FeedCard key={index} item={item} />
-                ))}
+                {id === "feed" && feedList && (
+                  feedList.length > 0 ? (
+                  feedList.map((item, index) => (
+                    <FeedCard key={index} item={item} />
+                  ))
+                  ) : (
+                    <p>데이터가 없습니다.</p>
+                  )
+                )}
               </div>
             </div>
             <div className="sm:w-3/12 hidden sm:flex ml-3 justify-evenly">
-              <div className="fixed flex">
-                <Input 
-                  placeholder="search..." 
-                  value={ideaKeyword} 
-                  onChange={(e) => setIdeaKeyword(e.target.value)}
-                />
-                <Button onClick={() => setPage(1)}>검색</Button>
+              <div className="fixed">
+              {id === undefined ? (
+                <div className="flex">
+                  <Input 
+                    placeholder="search..." 
+                    value={ideaKeyword} 
+                    onChange={(e) => setIdeaKeyword(e.target.value)}
+                    onKeyDown={handleEnterPress}
+                  />
+                  <Button onClick={searchData}>검색</Button>
+                </div>
+              ) : id === "feed" ? (
+                <div className="flex">
+                  {/* <Input 
+                    placeholder="search..." 
+                    value={ideaKeyword} 
+                    onChange={(e) => setIdeaKeyword(e.target.value)}
+                    onKeyDown={handleEnterPress}
+                  />
+                  <Button onClick={searchData}>검색</Button> */}
+                </div>
+              ) : (<div></div>)}
               </div>
             </div>
           </div>
@@ -191,13 +266,6 @@ const Idea = () => {
       </div>
       {/* 스크롤이 끝에 다다를 때 이 요소가 감지됨 */}
       <div id="scroll-trigger" style={{ height: '20px', backgroundColor: 'transparent' }} />
-
-      <Button onClick={openModal} variant="outline" className="w-full mb-10">
-        <span className="dark:text-white">작성</span>
-      </Button>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <IdeaAdd />
-      </Modal>
     </>
   );
 };
