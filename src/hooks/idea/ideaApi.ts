@@ -42,7 +42,7 @@ export const useIdeaList = () => {
 
   const ideaListApi = async (param: listReq) => {
     try {
-      if (isAuthenticated === true) {
+      if (isAuthenticated) {
         const response = await axiosInstance.get("/api/boards", {
           params: param,
           headers: {
@@ -69,9 +69,15 @@ export const useIdeaList = () => {
 
 // 아이디어 추가 API
 export const useIdeaAdd = () => {
-  const { accessToken } = useAuth();
+  const navigate = useNavigate();
+  const { accessToken, isAuthenticated } = useAuth();
   const ideaAddApi = async (param: boardAddReq) => {
     try {
+      // 로그인 안했을 경우 로그인 화면으로 이동
+      if(!isAuthenticated) {
+        navigate("/login");
+        return;
+      }
       const response = await axiosInstance.post(`/api/boards`, param, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -92,12 +98,12 @@ export const useIdeaAdd = () => {
 // 좋아요 토글 API
 export const useIdeaLikeToggle = () => {
   const navigate = useNavigate();
-  const { accessToken } = useAuth();
+  const { accessToken, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const ideaLikeToggleApi = async (param: string) => {
     try {
       // 로그인 안했을 경우 로그인 화면으로 이동
-      if(accessToken === null) {
+      if(!isAuthenticated) {
         navigate("/login");
         return;
       }

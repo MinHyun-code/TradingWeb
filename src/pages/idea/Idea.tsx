@@ -8,9 +8,12 @@ import { Input } from "@/components/ui/input";
 import LeftNavbar from "@/components/navbar/LeftNavbar";
 import { useParams } from "react-router-dom";
 import AutoResizeTextarea from "@/components/ui/autoResizeTextarea";
-import TagInput from "@/components/ui/tagInput"
+import TagInput from "@/components/ui/tagInput";
+import { useAuth } from "@/router/AuthContext";
 
 const Idea = () => {
+
+  const { isAuthenticated } = useAuth();
 
   /* 조회 로직 */
   const { ideaListApi } = useIdeaList();
@@ -201,20 +204,23 @@ const Idea = () => {
             </div>
             <div className="sm:w-6/12 w-screen border sm:rounded-2xl min-h-screen">
               <div className="pt-10">
-                <div className="border-t border-b flex justify-center">
-                  <div className="mt-8 mb-8 w-4/5">
-                    <Input
-                      placeholder="제목"
-                      className="mb-5"
-                      onChange={(e) => setSubject(e.target.value)}
-                    />
-                    <TagInput onChange={setTagList}/>
-                    <AutoResizeTextarea value={contents} onChange={setContents}/>
-                    <div className="flex justify-end mt-5">
-                      <Button onClick={ideaAdd}>Post</Button>
+                {isAuthenticated ? (
+                  <div className="border-t border-b flex justify-center">
+                    <div className="mt-8 mb-8 w-4/5">
+                      <Input
+                        placeholder="제목"
+                        className="mb-5"
+                        onChange={(e) => setSubject(e.target.value)}
+                      />
+                      <TagInput onChange={setTagList}/>
+                      <AutoResizeTextarea value={contents} onChange={setContents}/>
+                      <div className="flex justify-end mt-5">
+                        <Button onClick={ideaAdd}>Post</Button>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : null}
+                
                 {id === undefined && ideaList && (
                   ideaList.length > 0 ? (
                   ideaList.map((item, index) => (
