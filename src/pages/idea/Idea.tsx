@@ -28,6 +28,7 @@ const Idea = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const [urlId, setUrlId] = useState<string|undefined>(id);
   const [ideaKeyword, setIdeaKeyword] = useState<string>("");
+  const [feedCode, setFeedCode] = useState<string>("");
 
   // 데이터 요청 함수
   const loadMoreData = useCallback(async (id:string|undefined) => {
@@ -46,7 +47,9 @@ const Idea = () => {
 
         if(ideaKeyword != "") {
           param.keyword = ideaKeyword;
-          setIdeaList([]);
+          if(page === 1){
+            setIdeaList([]);
+          }
         }
 
         newIdeaItems = await ideaListApi(param);
@@ -60,7 +63,9 @@ const Idea = () => {
       // feed 조회
       else if (id === "feed") {
         param.type = "COIN";
-        param.code = "BTC";
+        if(feedCode != "") {
+          param.code = feedCode;
+        }
         newFeedItems = await feedListApi(param);
         setFeedList(prevData => [...prevData, ...newFeedItems]);
 
@@ -192,6 +197,17 @@ const Idea = () => {
     await ideaAddApi(param);
   };
 
+
+  // keyword Modal
+  const [keywordModal, setKeywordModal] = useState<boolean>(false);
+
+  const openKeyword = () => {
+    setKeywordModal(true);
+  }
+  const closeKeyword = () => {
+    setKeywordModal(false);
+  }
+
   return (
     <>
       <div className="flex flex-col items-center mt-10">
@@ -256,13 +272,14 @@ const Idea = () => {
                 </div>
               ) : id === "feed" ? (
                 <div className="flex">
-                  {/* <Input 
-                    placeholder="search..." 
-                    value={ideaKeyword} 
-                    onChange={(e) => setIdeaKeyword(e.target.value)}
-                    onKeyDown={handleEnterPress}
+                  <Input 
+                    placeholder="종목을 선택해주세요." 
+                    value={feedCode} 
+                    onChange={(e) => setFeedCode(e.target.value)}
+                    disabled={true}
+                    
                   />
-                  <Button onClick={searchData}>검색</Button> */}
+                  <Button onClick={openKeyword}>검색</Button>
                 </div>
               ) : (<div></div>)}
               </div>
