@@ -90,7 +90,9 @@ axiosInstance.interceptors.response.use(
           onRefreshed(tokens.accessToken);
 
           // 원래 요청 재시도
-          originalRequest.headers["Authorization"] = `Bearer ${tokens.accessToken}`;
+          if(originalRequest.url && originalRequest.url.startsWith('/api/')) {
+            originalRequest.headers["Authorization"] = `Bearer ${tokens.accessToken}`;
+          }
           return axiosInstance(originalRequest);
         } catch (refreshError) {
           isRefreshing = false;
@@ -118,8 +120,9 @@ axiosInstance.interceptors.response.use(
 // 요청 인터셉터 추가
 axiosInstance.interceptors.request.use((config) => {
   const accessToken = getCookie("accessToken");
-  // accessToken 재발급 & 로그인 API 제외
-  if (config.url && !config.url.includes("/api/auth/reissue-access-token") && !config.url.includes("/api/auth/login")) {
+
+  // accessToken 재발급 & 로그인 API 제외 & 외부 API 호출일 경우엔 제외
+  if (config.url && !config.url.includes("/api/auth/reissue-access-token") && !config.url.includes("/api/auth/login") && config.url.startsWith('/api/')) {
 
     // 토큰이 존재하면 Authorization 헤더에 Bearer 토큰 추가
     if (accessToken) {

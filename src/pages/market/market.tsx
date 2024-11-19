@@ -1,64 +1,77 @@
-import React, { useEffect } from "react";
-import { useUpbitMarket } from "@/hooks/upbit/UpbitApi";
-import { Button } from "@/components/ui/button";
-import "react-data-grid/lib/styles.css";
-import DataGrid from "react-data-grid";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useUpbitMarket, ItemData } from "@/hooks/upbit/UpbitApi";
+import { Input } from "@/components/ui/input";
 
 const Market = () => {
   const { upbitMarketApi, dataList } = useUpbitMarket();
 
-  const columns = [
-    { key: "market", name: "market" },
-    { key: "korean_name", name: "korean_name" },
-    { key: "english_name", name: "english_name" },
-  ];
+  const [rowData, setRowData] = useState<ItemData[]>([]);
+  const [search, setSearch] = useState<string>("");
+
+  useEffect(() => {
+    setRowData(dataList?.KRW ?? []);
+  }, [dataList]);
 
   useEffect(() => {
     upbitMarketApi();
   }, []);
 
-  useEffect(() => {
-    console.log("DataList updated:", dataList); // dataList가 업데이트될 때마다 로그에 찍음
-  }, [dataList]);
-
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    navigate("/Chart"); // '/market'으로 이동
-  };
-
-  // 데이터가 없거나 로딩 중일 때의 처리
-  if (
-    !dataList ||
-    (!dataList.KRW.length && !dataList.BTC.length && !dataList.USDT.length)
-  ) {
-    return (
-      <p>
-        <LoadingSpinner />
-      </p>
-    );
-  }
-
   return (
-    <>
-      <Button onClick={handleButtonClick}>차트 이동(USDT-BTC)</Button>
-      <div className="flex">
-        <div>
-          <h1>KRW</h1>
-          <DataGrid columns={columns} rows={dataList.KRW} />
-        </div>
-        <div>
-          <h1>BTC</h1>
-          <DataGrid columns={columns} rows={dataList.BTC} />
-        </div>
-        <div>
-          <h1>USDT</h1>
-          <DataGrid columns={columns} rows={dataList.USDT} />
+    <div className="flex w-full flex-col justify-center space-y-6 pt-8 pb-3">
+      <div className="mx-10">
+        <Input
+          placeholder="검색"
+          className="mb-5"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+        />
+      </div>
+      <div className="h-96 overflow-auto p-3">
+        <div className="grid gap-3">
+          {rowData.map((item, index) => {
+            if (
+              search != "" &&
+              !item.english_name.toLowerCase().includes(search.toLowerCase()) &&
+              !item.market.toLowerCase().includes(search.toLowerCase())
+            ) {
+              return null;
+            }
+
+            return (
+              <div
+                key={index}
+                className="flex items-center justify-between space-x-4"
+              >
+                <div className="flex items-center space-x-4">
+                  <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+                    <img
+                      className="aspect-square h-full w-full"
+                      alt="Image"
+                      src={`/images/coin/${item.english_name
+                        .replace(" ", "-")
+                        .toLowerCase()}.png`}
+                      onError={(e) => {
+                        // e.target을 HTMLImageElement로 타입 단언
+                        (e.target as HTMLImageElement).src =
+                          "/images/no-image.png";
+                      }}
+                    />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium leading-none text-left">
+                      {item.english_name}
+                    </p>
+                    <p className="text-xs text-muted-foreground text-left">
+                      {item.market}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
