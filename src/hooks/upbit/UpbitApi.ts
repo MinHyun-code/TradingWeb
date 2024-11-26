@@ -1,5 +1,7 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
 
 export interface ItemData {
   market: string;
@@ -34,6 +36,35 @@ export type ChartResult = {
   candle_acc_trade_price: number;
   candle_acc_trade_volume: number;
 };
+
+export type upbitPriceRes = {
+  market: string;
+  trade_date: string;
+  trade_time: string;
+  trade_date_kst: string;
+  trade_time_kst: string;
+  trade_timestamp: number;
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
+  prev_closing_price: number;
+  change: string;
+  change_price: number;
+  change_rate: number;
+  signed_change_price: number;
+  signed_change_rate: number;
+  trade_volume: number;
+  acc_trade_price: number;
+  acc_trade_price_24h: number;
+  acc_trade_volume: number;
+  acc_trade_volume_24h: number;
+  highest_52_week_price: number;
+  highest_52_week_date: string;
+  lowest_52_week_price: number;
+  lowest_52_week_date: string;
+  timestamp: number;
+}
 
 // 업비트 종목 조회 API
 export const useUpbitMarket = () => {
@@ -105,5 +136,43 @@ export const useUpbitChart = () => {
   return {
     upbitChartApi,
     dataList,
+  };
+};
+
+
+// 업비트 시세 단일 건 조회 API
+export const useUpbitPrice = () => {
+  const { toast } = useToast();
+  const [priceList, setPriceList] = useState<upbitPriceRes[]>();
+
+  const upbitPriceApi = async (coinList: string[]) => {
+    try {
+      const param = coinList.join(",");
+      const response = await axiosInstance.get(`/upbit-api/v1/ticker?markets=`+param);
+      console.log(response);
+      setPriceList(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+        error.response.data?.result?.message ||
+        "시세 조회 중 오류가 발생했습니다.";
+        toast({
+          description: errorMessage,
+          duration: 2000,
+        });
+      } else {
+        toast({
+          description: "예기치 못한 오류가 발생했습니다.",
+          duration: 2000,
+        });
+      }
+      console.error("오류:", error);
+      return false;
+    }
+  };
+
+  return {
+    upbitPriceApi,
+    priceList
   };
 };

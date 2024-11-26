@@ -1,75 +1,114 @@
-import React, { useEffect, useState } from "react";
-import { useUpbitChart, ChartParam } from "@/hooks/upbit/UpbitApi";
-import Chart from "@/components/chart/Chart";
-import "@/App.css";
+import React from "react";
+import { Line, Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Legend,
+  Tooltip,
+} from "chart.js";
+import useWebSocket from "@/hooks/webSocket/WebSocketChart";
 
-type SeriesType = {
-  x: Date;
-  y: number[];
-};
+// Chart.js 등록
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Legend,
+  Tooltip
+);
 
-type SeriesLinearType = {
-  x: Date;
-  y: number;
-};
+const MultiChart: React.FC = () => {
+  const { data } = useWebSocket("wss://api.upbit.com/websocket/v1");
 
-const ApexChart: React.FC = () => {
-  const { upbitChartApi, dataList } = useUpbitChart();
-  const [param, setParam] = useState<ChartParam>();
-  const [seriesData, setSeriesData] = useState<SeriesType[]>([]);
-  const [seriesDataLinear, setSeriesDataLinear] = useState<SeriesLinearType[]>(
-    []
-  );
+  // 수신된 데이터를 시세와 거래량에 맞게 각각 매핑
+  const chartDataPrice = {
+    labels: data.map((item: any) =>
+      new Date(item.trade_timestamp).toLocaleTimeString()
+    ), // timestamp를 시간 형식으로 변환
+    datasets: [
+      {
+        type: "line", // 선 그래프 (시세)
+        label: "Coin Price",
+        data: data.map((item: any) => item.trade_price),
+        borderColor: "rgba(75,192,192,1)",
+        backgroundColor: "rgba(75,192,192,0.2)",
+        yAxisID: "y-axis-price",
+        tension: 0.1,
+      },
+    ],
+  };
 
-  useEffect(() => {
-    setParam({
-      convertingPriceUnit: "KRW",
-      count: 60,
-      market: "KRW-BTC",
-      to: null,
-      type: "minutes",
-      unit: 1,
-    });
-    if (param != undefined) {
-      upbitChartApi(param);
-    }
-  }, []);
+  const chartDataVolume = {
+    labels: data.map((item: any) =>
+      new Date(item.trade_timestamp).toLocaleTimeString()
+    ),
+    datasets: [
+      {
+        type: "bar", // 막대 그래프 (거래량)
+        label: "Volume",
+        data: data.map((item: any) => item.trade_volume),
+        backgroundColor: "rgba(192,75,75,0.8)",
+        yAxisID: "y-axis-volume",
+      },
+    ],
+  };
 
-  useEffect(() => {
-    console.log("ChartList updated:", dataList); // dataList가 업데이트될 때마다 로그에 찍음
-    // 초기화
-    setSeriesData([]);
-    setSeriesDataLinear([]);
-    if (dataList != undefined) {
-      for (const item of dataList) {
-        setSeriesData((prevData) => [
-          {
-            x: item.candle_date_time_kst,
-            y: [
-              item.opening_price,
-              item.high_price,
-              item.low_price,
-              item.trade_price,
-            ],
-          },
-          ...prevData,
-        ]);
-        setSeriesDataLinear((prevData) => [
-          {
-            x: item.candle_date_time_kst,
-            y: item.candle_acc_trade_volume,
-          },
-          ...prevData,
-        ]);
-      }
-    }
-  }, [dataList]);
+  const optionsPrice = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+      },
+    },
+    scales: {
+      "y-axis-price": {
+        type: "linear",
+        position: "left", // 왼쪽 y축 (시세)
+        title: {
+          display: true,
+          text: "Price (KRW)",
+        },
+      },
+    },
+  };
+
+  const optionsVolume = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+      },
+    },
+    scales: {
+      "y-axis-volume": {
+        type: "linear",
+        position: "left", // 왼쪽 y축 (거래량)
+        title: {
+          display: true,
+          text: "Volume",
+        },
+      },
+    },
+  };
 
   return (
-    <div className="flex">
-      <Chart></Chart>
+    <div style={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+      <div style={{ width: "800px", height: "500px" }}>
+        <h3>Coin Price</h3>
+        <Line data={chartDataPrice} options={optionsPrice} />
+      </div>
+      <div style={{ width: "800px", height: "500px" }}>
+        <h3>Volume</h3>
+        <Bar data={chartDataVolume} options={optionsVolume} />
+      </div>
     </div>
   );
 };
 
-export default ApexChart;
+export default MultiChart;

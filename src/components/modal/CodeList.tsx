@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUpbitMarket, ItemData } from "@/hooks/upbit/UpbitApi";
 import { Button } from "@/components/ui/button";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 
 // props의 타입을 정의합니다.
 interface ParentComponentProps {
