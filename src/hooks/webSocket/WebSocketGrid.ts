@@ -21,7 +21,6 @@ const useWebSocketGrid = (url: string, dataList: ItemData[]) => {
 
   // dataList가 변경되었을 때만 WebSocket 연결
   useEffect(() => {
-    console.log(dataList);
     // dataList가 비어있으면 WebSocket 연결을 만들지 않음
     if (!dataList || dataList.length === 0) return;
 
