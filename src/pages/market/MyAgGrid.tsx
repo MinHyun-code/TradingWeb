@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useTable } from "react-table";
 import useWebSocket from "@/hooks/webSocket/WebSocketGrid";
 import {
@@ -6,7 +6,6 @@ import {
   useUpbitMarket,
   useUpbitPrice,
 } from "@/hooks/upbit/UpbitApi";
-import { throttle } from "lodash"; // lodash throttle import
 
 // 코인 데이터 타입 정의
 type CoinData = {
@@ -20,6 +19,8 @@ const CoinGrid: React.FC = () => {
   const { upbitMarketApi, dataList } = useUpbitMarket();
   const { upbitPriceApi, priceList } = useUpbitPrice();
   const [coinData, setCoinData] = useState<CoinData[]>([]);
+  // WebSocket 연결 여부 상태 관리
+  const [isWebSocketReady, setIsWebSocketReady] = useState(false);
 
   // upbitMarketApi를 한 번만 호출
   useEffect(() => {
@@ -36,95 +37,93 @@ const CoinGrid: React.FC = () => {
       upbitPriceApi(codes);
     }
   }, [dataList]);
+
+  /* 첫 데이터 전체 조회 */
   useEffect(() => {
-    if (priceList) {
-      priceList.map((item) =>
-        setCoinData((prevData) => {
-          return [
-            ...prevData,
-            {
-              coin: item.market,
-              logo: (
-                <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
-                  <img
-                    className="aspect-square h-full w-full"
-                    alt="Image"
-                    src={`/images/coin/${item.english_name.replace(" ", "-").toLowerCase()}.png`} // JSX에서 템플릿 문자열을 사용
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/images/no-image.png"; // 에러 발생 시 대체 이미지
-                    }}
-                  />
-                </span>
-              ),
-              trade_price: item.acc_trade_price,
-              trade_volume: item.acc_trade_volume,
-              acc_trade_price_24h: item.acc_trade_price_24h,
-            },
-          ];
-        })
+    if (priceList && priceList.length > 0) {
+      setCoinData(
+        priceList.map((item) => ({
+          coin: item.market,
+          logo: (
+            <span className="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full">
+              <img
+                className="aspect-square h-full w-full"
+                alt="Image"
+                src={`/images/coin/${item.english_name.replace(" ", "-").toLowerCase()}.png`}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/images/no-image.png";
+                }}
+              />
+            </span>
+          ),
+          trade_price: item.trade_price,
+          trade_volume: item.trade_volume,
+          acc_trade_price_24h: item.acc_trade_price_24h,
+        }))
       );
+      setIsWebSocketReady(true); // WebSocket 준비 완료
     }
-    console.log(coinData);
   }, [priceList]);
+  
   
   // WebSocket 데이터 수신
   const { data } = useWebSocket(
     "wss://api.upbit.com/websocket/v1",
-    dataList?.KRW
+    isWebSocketReady ? dataList?.KRW : null // WebSocket 실행 조건
   );
 
-  // 수신된 데이터 처리 함수 (throttle 적용)
-  const processData = useRef(
-    throttle((newData: any) => {
-      try {
-        const parsedData =
-          typeof newData === "string" ? JSON.parse(newData) : newData;
-
-        if (
-          parsedData.code &&
-          parsedData.trade_price &&
-          parsedData.trade_volume
-        ) {
-          const updatedData: CoinData = {
-            coin: parsedData.code,
-            trade_price: parsedData.trade_price,
-            trade_volume: parsedData.trade_volume,
-          };
-
-          setCoinData((prevData) => {
-            const existingCoin = prevData.find(
-              (coin) => coin.coin === updatedData.coin
-            );
-
-            if (existingCoin) {
-              return prevData.map((coin) =>
-                coin.coin === updatedData.coin
-                  ? {
-                      ...coin,
-                      trade_price: updatedData.trade_price,
-                      trade_volume: updatedData.trade_volume,
-                    }
-                  : coin
-              );
-            } else {
-              return [...prevData, updatedData];
-            }
-          });
-        }
-      } catch (error) {
-        console.error("Error parsing WebSocket data", error);
+  // 수신된 데이터 처리 함수
+  const processData = useCallback((newData: any) => {
+    try {
+      const parsedData =
+        typeof newData === "string" ? JSON.parse(newData) : newData;
+  
+      if (
+        parsedData.code &&
+        parsedData.trade_price &&
+        parsedData.trade_volume
+      ) {
+        const updatedData: CoinData = {
+          coin: parsedData.code,
+          trade_price: parsedData.trade_price,
+          trade_volume: parsedData.trade_volume,
+        };
+  
+        setCoinData((prevData) => {
+          const existingCoin = prevData.find(
+            (coin) => coin.coin === updatedData.coin
+          );
+  
+          if (
+            !existingCoin || // 새로운 코인 데이터
+            existingCoin.trade_price !== updatedData.trade_price || // 가격 변경
+            existingCoin.trade_volume !== updatedData.trade_volume // 거래량 변경
+          ) {
+            return existingCoin
+              ? prevData.map((coin) =>
+                  coin.coin === updatedData.coin
+                    ? { ...coin, ...updatedData }
+                    : coin
+                )
+              : [...prevData, updatedData];
+          }
+  
+          return prevData; // 변경이 없으면 기존 데이터 유지
+        });
       }
-    }, 30) // 20ms로 throttle 설정
-  ).current;
+    } catch (error) {
+      console.error("Error parsing WebSocket data", error);
+    }
+  }, []);
+  
 
   // 데이터 수신 시 처리
   useEffect(() => {
-    if (data) {
-      processData(data); // throttled 함수로 데이터 처리
+    if (data && isWebSocketReady) {
+      processData(data);
     }
-  }, [data, processData]);
+  }, [data, isWebSocketReady, processData]);
 
-  // 테이블 컬럼 정의
   const columns = React.useMemo(
     () => [
       {

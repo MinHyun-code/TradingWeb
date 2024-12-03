@@ -157,7 +157,6 @@ export const useUpbitPrice = () => {
 
       const response = await axiosInstance.get(`/upbit-api/v1/ticker?markets=`+param);
 
-      // setPriceList(response.data)
       setPriceList((prevList) => {
         return response.data.reduce((updatedList, newCoin) => {
           // 기존 리스트에서 해당 market 값이 있는지 확인
@@ -167,7 +166,9 @@ export const useUpbitPrice = () => {
             // 기존 값이 있으면 업데이트 (예시로 trade_price만 업데이트)
             return updatedList.map((coin) =>
               coin.market === newCoin.market
-                ? { ...coin, 
+                ? { 
+                  market: coin.market, 
+                  english_name: coin.english_name,
                   trade_price: newCoin.trade_price,
                   trade_volume: newCoin.trade_volume,
                   acc_trade_price_24h: newCoin.acc_trade_price_24h,
