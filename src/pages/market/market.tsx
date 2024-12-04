@@ -1,5 +1,5 @@
 import React from "react";
-import CoinGrid from "./MyAgGrid";
+import CoinGrid from "./MarketGrid";
 
 const Market: React.FC = () => {
 
