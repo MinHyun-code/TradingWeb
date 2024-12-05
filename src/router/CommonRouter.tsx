@@ -7,7 +7,6 @@ import Idea from "@/pages/idea/Idea";
 import News from "@/pages/news/News";
 import Interest from "@/pages/interest/Interest";
 import Market from "@/pages/market/Market";
-import Test from "@/pages/market/Test";
 import ChartView from "@/pages/market/ChartView";
 import MyPage from "@/pages/mypage/MyPage";
 /* layout */
@@ -30,7 +29,6 @@ function CommonRouter() {
           <Route path="/idea" element={<Idea />}></Route>
           <Route path="/idea/:id" element={<Idea />}></Route>
           <Route path="/idea/:id/:item" element={<Idea />}></Route>
-          <Route path="/test" element={<Test />}></Route>
           <Route
             path="/mypage"
             element={<PrivateRoute element={<MyPage />} />}

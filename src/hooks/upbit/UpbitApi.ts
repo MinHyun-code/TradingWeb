@@ -2,12 +2,22 @@ import axiosInstance from "@/configs/axios/axiosConfig";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
+import Decimal from 'decimal.js';
 
 export interface ItemData {
   market: string;
   korean_name: string;
   english_name: string;
 }
+
+export type CoinData = {
+  logo?: string;
+  coin: string;
+  trade_price: number | string;
+  trade_percent: string;
+  acc_trade_price_24h?: number;
+};
+
 
 type ItemResult = {
   KRW: ItemData[];
@@ -171,7 +181,7 @@ export const useUpbitPrice = () => {
                   market: coin.market, 
                   english_name: coin.english_name,
                   trade_price: newCoin.trade_price,
-                  trade_percent: (newCoin.trade_price-newCoin.prev_closing_price) / newCoin.prev_closing_price * 100,
+                  trade_percent: new Decimal(new Decimal(new Decimal(newCoin.trade_price).minus(new Decimal(newCoin.prev_closing_price))).div(new Decimal(newCoin.prev_closing_price))).times(new Decimal(100)).toFixed(2),
                   acc_trade_price_24h: newCoin.acc_trade_price_24h,
                 }  // 필요한 값만 업데이트
                 : coin
