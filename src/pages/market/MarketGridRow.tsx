@@ -34,10 +34,12 @@ const MarketGridRow = React.memo(({ index, style, initialCoinData }) => {
                 />
                 </span>
             </div>
-            <div className="w-2/12">{coin.coin}</div>
-            <div className={`w-2/12 font-semibold ${getClassName(coin.trade_percent)}`}>{coin.trade_price}</div>
-            <div className={`w-3/12 font-semibold ${getClassName(coin.trade_percent)}`}>{coin.trade_percent}</div>
-            <div className="w-3/12">{coin.acc_trade_price_24h}</div>
+            <div className="w-4/12">{coin.coin}</div>
+            <div className="flex flex-col items-end w-3/12">
+                <div className={`font-semibold ${getClassName(coin.trade_percent)}`}>{coin.trade_price}</div>
+                <div className={`font-semibold ${getClassName(coin.trade_percent)}`}>{coin.trade_percent}</div>
+            </div>
+            <div className="w-4/12">{coin.acc_trade_price_24h}</div>
         </div>
     );
 });

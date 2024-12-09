@@ -9,8 +9,6 @@ const News = () => {
   const { id } = useParams<{ id: string }>();
   const { newsListApi, dataList } = useNewsList();
 
-  const [items, setItems] = useState([]);
-
   useEffect(() => {
     if (id === undefined) {
       navigate("/news/mk");
