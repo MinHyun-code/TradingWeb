@@ -1,5 +1,5 @@
 import { useNewsList } from "@/hooks/news/NewsApi";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import NewsCard from "@/components/card/NewsCard";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -17,6 +17,12 @@ const News = () => {
     }
   }, [id]);
 
+
+  useEffect(() => {
+    if (dataList?.rss.channel === undefined) {
+    }
+  }, [dataList]);
+  
   const items = dataList?.rss.channel.item ?? [];
 
   // 최대 표시할 항목 수

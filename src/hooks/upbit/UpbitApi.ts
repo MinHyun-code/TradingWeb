@@ -1,11 +1,24 @@
 import axiosInstance from "@/configs/axios/axiosConfig";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
+import Decimal from 'decimal.js';
 
 export interface ItemData {
   market: string;
   korean_name: string;
   english_name: string;
 }
+
+export type CoinData = {
+  english_name?: string;
+  logo?: string;
+  market: string;
+  trade_price: number;
+  trade_percent: number;
+  acc_trade_price_24h?: number;
+};
+
 
 type ItemResult = {
   KRW: ItemData[];
@@ -34,6 +47,36 @@ export type ChartResult = {
   candle_acc_trade_price: number;
   candle_acc_trade_volume: number;
 };
+
+export type upbitPriceRes = {
+  english_name: string;
+  market: string;
+  trade_date?: string;
+  trade_time?: string;
+  trade_date_kst?: string;
+  trade_time_kst?: string;
+  trade_timestamp?: number;
+  opening_price?: number;
+  high_price?: number;
+  low_price?: number;
+  trade_price: number;
+  prev_closing_price: number;
+  change?: string;
+  change_price?: number;
+  change_rate?: number;
+  signed_change_price?: number;
+  signed_change_rate?: number;
+  trade_volume?: number;
+  acc_trade_price?: number;
+  acc_trade_price_24h?: number;
+  acc_trade_volume?: number;
+  acc_trade_volume_24h?: number;
+  highest_52_week_price?: number;
+  highest_52_week_date?: string;
+  lowest_52_week_price?: number;
+  lowest_52_week_date?: string;
+  timestamp?: number;
+}
 
 // 업비트 종목 조회 API
 export const useUpbitMarket = () => {
@@ -105,5 +148,76 @@ export const useUpbitChart = () => {
   return {
     upbitChartApi,
     dataList,
+  };
+};
+
+
+// 업비트 시세 단일 건 조회 API
+export const useUpbitPrice = () => {
+  const { toast } = useToast();
+  const [priceList, setPriceList] = useState<CoinData[]>();
+
+  const upbitPriceApi = async (coinList: ItemData[]) => {
+    try {
+      const param = coinList.map((coin) => coin.market).join(",");
+
+      setPriceList(coinList.map((item) => ({
+        market: item.market,
+        english_name: item.english_name,
+        trade_price: 0,
+        trade_percent: 0,
+        acc_trade_price_24h: 0
+      })));
+
+      const response = await axiosInstance.get(`/upbit-api/v1/ticker?markets=`+param);
+
+      setPriceList((prevList) => {
+        return response.data.reduce((updatedList:CoinData[], newCoin:upbitPriceRes) => {
+          // 기존 리스트에서 해당 market 값이 있는지 확인
+          const existingCoin = updatedList.find((coin) => coin.market === newCoin.market);
+  
+          if (existingCoin) {
+            // 기존 값이 있으면 업데이트 (예시로 trade_price만 업데이트)
+            return updatedList.map((coin) =>
+              coin.market === newCoin.market
+                ? { 
+                  market: coin.market, 
+                  english_name: coin.english_name,
+                  trade_price: newCoin.trade_price,
+                  trade_percent: new Decimal(new Decimal(new Decimal(newCoin.trade_price).minus(new Decimal(newCoin.prev_closing_price))).div(new Decimal(newCoin.prev_closing_price))).times(new Decimal(100)).toFixed(2),
+                  acc_trade_price_24h: newCoin.acc_trade_price_24h,
+                }  // 필요한 값만 업데이트
+                : coin
+            );
+          } else {
+            // 기존 값이 없으면 새로운 coin 추가
+            return [...updatedList, newCoin];
+          }
+        }, prevList); // prevList는 이전 priceList 상태
+      });
+      
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        const errorMessage =
+        error.response.data?.result?.message ||
+        "시세 조회 중 오류가 발생했습니다.";
+        toast({
+          description: errorMessage,
+          duration: 2000,
+        });
+      } else {
+        toast({
+          description: "예기치 못한 오류가 발생했습니다.",
+          duration: 2000,
+        });
+      }
+      console.error("오류:", error);
+      return false;
+    }
+  };
+
+  return {
+    upbitPriceApi,
+    priceList
   };
 };

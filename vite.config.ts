@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
       alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     },
     server: {
-      port: 5173,
+      port: 5174,
       proxy: {
         "/api": {
           target: `${env.PROXY_URL}`,
