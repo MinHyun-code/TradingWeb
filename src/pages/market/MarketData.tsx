@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useWebSocket from "@/hooks/webSocket/WebSocketGrid";
-import { ItemData, useUpbitMarket, useUpbitPrice, CoinData } from "@/hooks/upbit/UpbitApi";
+import { ItemData, useUpbitMarket, useUpbitPrice, CoinData, upbitPriceRes } from "@/hooks/upbit/UpbitApi";
 import Decimal from 'decimal.js';
 import MarketGrid from './MarketGrid';
 
@@ -12,8 +12,9 @@ const MarketData: React.FC = () => {
 
   const { data } = useWebSocket(
     "wss://api.upbit.com/websocket/v1",
-    isWebSocketReady ? dataList?.KRW : null
+    isWebSocketReady ? dataList?.KRW ?? [] : [] // null 또는 undefined일 때 빈 배열을 전달
   );
+  
 
   useEffect(() => {
     upbitMarketApi();
@@ -26,6 +27,7 @@ const MarketData: React.FC = () => {
         english_name: item.english_name,
         korean_name: item.korean_name,
       }));
+
       upbitPriceApi(codes);
     }
   }, [dataList]);
@@ -33,14 +35,18 @@ const MarketData: React.FC = () => {
   useEffect(() => {
     if (priceList && priceList.length > 0) {
       setCoinData(
-        priceList.map((item:CoinData) => ({
-          coin: item.market,
-          logo: `/images/coin/${item.english_name.replace(" ", "-").toLowerCase()}.png`,
-          trade_price: formatTradePrice(item.trade_price),
+        priceList.map((item: CoinData) => ({
+          logo: item.english_name 
+            ? `/images/coin/${item.english_name.replace(" ", "-").toLowerCase()}.png` 
+            : "/images/no-image.png", // 만약 english_name이 undefined라면 기본 이미지로 처리
+          english_name: item.english_name,
+          market: item.market,
+          trade_price: item.trade_price,
           trade_percent: item.trade_percent,
-          acc_trade_price_24h: formatToMillion(item.acc_trade_price_24h),
+          acc_trade_price_24h: item.acc_trade_price_24h
         }))
       );
+      
       setIsWebSocketReady(true);
     }
   }, [priceList]);
@@ -51,13 +57,13 @@ const MarketData: React.FC = () => {
 
       if (parsedData.code && parsedData.trade_price && parsedData.trade_volume) {
         const updatedData: CoinData = {
-          coin: parsedData.code,
-          trade_price: formatTradePrice(parsedData.trade_price),
-          trade_percent: new Decimal(new Decimal(new Decimal(parsedData.trade_price).minus(new Decimal(parsedData.prev_closing_price))).div(new Decimal(parsedData.prev_closing_price))).times(new Decimal(100)).toFixed(2),
+          market: parsedData.code,
+          trade_price: parsedData.trade_price,
+          trade_percent: Number(new Decimal(new Decimal(new Decimal(parsedData.trade_price).minus(new Decimal(parsedData.prev_closing_price))).div(new Decimal(parsedData.prev_closing_price))).times(new Decimal(100)).toFixed(2)),
         };
 
         setCoinData((prevData) => {
-          const existingCoin = prevData.find((coin) => coin.coin === updatedData.coin);
+          const existingCoin = prevData.find((coin) => coin.market === updatedData.market);
 
           if (
             !existingCoin ||
@@ -65,7 +71,7 @@ const MarketData: React.FC = () => {
           ) {
             return existingCoin
               ? prevData.map((coin) =>
-                  coin.coin === updatedData.coin ? { ...coin, ...updatedData } : coin
+                  coin.market === updatedData.market ? { ...coin, ...updatedData } : coin
                 )
               : [...prevData, updatedData];
           }
@@ -84,24 +90,8 @@ const MarketData: React.FC = () => {
     }
   }, [data, isWebSocketReady, processData]);
 
-  const formatTradePrice = (number:number) => {
-    if (isNaN(number)) return number; // 숫자가 아닌 경우 그대로 반환
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
-
-  const formatToMillion = (number:number) => {
-    if (typeof number !== "number" || isNaN(number)) {
-      return ""; // 유효하지 않은 입력 처리
-    }
-    if (number >= 1_000_000) {
-      const value = new Decimal(new Decimal(number).div(new Decimal(1000000))).toFixed(0); // 소수점 0자리로 고정
-      return `${Number(value).toLocaleString('ko-KR')}M`;
-    }
-    return number.toLocaleString('ko-KR'); // 1백만 미만은 일반 스타일로 표시
-  };
-
   return (
-    <div>
+    <div className="">
       <MarketGrid coinData={coinData}/>
     </div>
   );

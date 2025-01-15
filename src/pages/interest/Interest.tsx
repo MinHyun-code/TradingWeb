@@ -11,9 +11,13 @@ const Interest = () => {
 
   return (
     <>
-      <div className="flex justify-between">
-        <Market/>
-        <MarketDetail/>
+      <div className="flex justify-between ml-5 sm:mt-20">    
+        <div className="w-3/12">
+          <Market/>
+        </div>
+        <div className="w-9/12">
+          <MarketDetail/>
+        </div>
       </div>
     </>
   );

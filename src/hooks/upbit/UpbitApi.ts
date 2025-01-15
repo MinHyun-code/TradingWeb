@@ -11,10 +11,11 @@ export interface ItemData {
 }
 
 export type CoinData = {
+  english_name?: string;
   logo?: string;
-  coin: string;
-  trade_price: number | string;
-  trade_percent: string;
+  market: string;
+  trade_price: number;
+  trade_percent: number;
   acc_trade_price_24h?: number;
 };
 
@@ -58,8 +59,8 @@ export type upbitPriceRes = {
   opening_price?: number;
   high_price?: number;
   low_price?: number;
-  trade_price?: number;
-  prev_closing_price?: number;
+  trade_price: number;
+  prev_closing_price: number;
   change?: string;
   change_price?: number;
   change_rate?: number;
@@ -154,7 +155,7 @@ export const useUpbitChart = () => {
 // 업비트 시세 단일 건 조회 API
 export const useUpbitPrice = () => {
   const { toast } = useToast();
-  const [priceList, setPriceList] = useState<upbitPriceRes[]>();
+  const [priceList, setPriceList] = useState<CoinData[]>();
 
   const upbitPriceApi = async (coinList: ItemData[]) => {
     try {
@@ -163,13 +164,15 @@ export const useUpbitPrice = () => {
       setPriceList(coinList.map((item) => ({
         market: item.market,
         english_name: item.english_name,
+        trade_price: 0,
+        trade_percent: 0,
+        acc_trade_price_24h: 0
       })));
 
       const response = await axiosInstance.get(`/upbit-api/v1/ticker?markets=`+param);
 
-      console.log(response);
       setPriceList((prevList) => {
-        return response.data.reduce((updatedList, newCoin) => {
+        return response.data.reduce((updatedList:CoinData[], newCoin:upbitPriceRes) => {
           // 기존 리스트에서 해당 market 값이 있는지 확인
           const existingCoin = updatedList.find((coin) => coin.market === newCoin.market);
   
